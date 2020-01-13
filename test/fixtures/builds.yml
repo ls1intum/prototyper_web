@@ -1,0 +1,11 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  ipa: MyString
+  manifest_url: MyString
+  release:
+
+two:
+  ipa: MyString
+  manifest_url: MyString
+  release:

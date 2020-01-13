@@ -1,0 +1,37 @@
+<h3><%= "#{@app.name} Prototyper Container" %></h3>
+<table class="table">
+  <tbody>
+    <tr>
+      <td>
+        URL
+      </td>
+      <td>
+        <%= @container.marvel_url %>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        Created
+      </td>
+      <td>
+        <%= @container.created_at.strftime("%d.%m.%Y %H:%M (Munich Time)") %>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        URL
+      </td>
+      <td>
+        <%= @container.marvel_url %>
+      </td>
+    </tr>
+    <tr id="status">
+      <td>
+        State
+      </td>
+      <td>
+        <p class="status" app_id="<%= @app.id %>" container_id="<%= @container.id %>">Loading...</p>
+      </td>
+    </tr>
+  </tbody>
+</table>

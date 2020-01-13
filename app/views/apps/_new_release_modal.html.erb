@@ -1,0 +1,108 @@
+<div class="modal fade" id="new_release_modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="exampleModalLabel">Select release</h4>
+      </div>
+      <div id="release_selection">
+        <div class="modal-body">
+          <div class="tab-content">
+            <% @releases.each_slice(5).to_a.each_with_index do |releases, index| %>
+              <% if index == 0 %>
+              <div id="<%= index %>" class="tab-pane fade in active">
+              <% else %>
+              <div id="<%= index %>" class="tab-pane fade in">
+              <% end %>
+                <table class="table new_release_table">
+                  <thead>
+                    <tr>
+                      <th>Release</th>
+                      <th>Identifier</th>
+                      <th>Created</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <% releases.each do |release| %>
+                      <tr class="clickable-row" release_id="<%= release.id %>">
+                        <td>
+                          <%= image_tag(app_release_icon_url(@app, release), alt: release.version, class: "icon") %>
+                        </td>
+                        <td>
+                          <%= release.type == "Prototype" ? release.url : (release.builds.first.nil? || release.builds.first.bundle_version.nil? ? release.bamboo_branch : release.builds.first.bundle_version) %>
+                        </td>
+                        <td>
+                          <%= release.created_at.strftime("%d.%m.%Y %H:%M (Munich Time)") %>
+                        </td>
+                      </tr>
+                    <% end %>
+                  </tbody>
+                </table>
+              </div>
+            <% end %>
+          </div>
+          <div class="text-center">
+            <ul class="pagination">
+              <% @releases.each_slice(5).to_a.each_with_index do |releases, index| %>
+                <% if index == 0 %>
+                  <li class="active"><a data-toggle="tab" href="#<%= index %>"><%= index + 1 %></a></li>
+                <% else %>
+                  <li><a data-toggle="tab" href="#<%= index %>"><%= index + 1 %></a></li>
+                <% end %>
+              <% end %>
+            </ul>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-danger" id="remove_release_button" onclick="removeReleaseFromGroup(<%= @app.id %>, $(this).data('group_id'), $(this).data('is_main_release'), this)">Remove release from group</button>
+
+          <button type="button" class="btn btn-default" data-dismiss="modal" onclick="resetNewReleaseDialog()">Cancel</button>
+          <button type="button" class="btn btn-primary" id="show_release_submission_button" onclick="showReleaseSubmissionDialog(<%= @app.id %>)" disabled="true">Next</button>
+        </div>
+      </div>
+      <div id="release_submission" style="display: none;">
+        <div class="modal-body">
+          <table class="table new_release_table">
+            <thead>
+              <tr>
+                <th>Release</th>
+                <th>Identifier</th>
+                <th>Created</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% @releases.each do |release| %>
+                <tr class="clickable-row" release_id="<%= release.id %>">
+                  <td>
+                    <%= image_tag(app_release_icon_url(@app, release), alt: release.version, class: "icon") %>
+                  </td>
+                  <td>
+                    <%= release.type == "Prototype" ? release.url : (release.builds.first.nil? || release.builds.first.bundle_version.nil? ? release.bamboo_branch : release.builds.first.bundle_version) %>
+                  </td>
+                  <td>
+                    <%= release.created_at.strftime("%d.%m.%Y %H:%M (Munich Time)") %>
+                  </td>
+                </tr>
+              <% end %>
+            </tbody>
+          </table>
+          <%= form_tag '/upload', html: { multipart: true } do %>
+            <%= label_tag "changelog", "Release notes" %>
+            <%= text_area_tag "changelog", "", class: 'form-control' %>
+          <% end %>
+          <div class="form-group">
+            <%= label_tag "Delivery options:" %></br>
+            <%= label_tag "send_mails", class: "checkbox inline" do %>
+              <%= check_box_tag "send_mails", "true", true %>
+              <span id="release_email_checkbox_text">Send email to all members in XX</span>
+            <% end %>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal" onclick="resetNewReleaseDialog()">Cancel</button>
+          <button type="button" class="btn btn-primary" id="release_submission_button" onclick="releaseToGroup(<%= @app.id %>, $(this).data('release_id'), $(this).data('group_id'), $(this).data('is_main_release'), this)">Release to XXX</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

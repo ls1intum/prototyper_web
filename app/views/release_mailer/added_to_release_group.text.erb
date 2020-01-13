@@ -1,0 +1,12 @@
+Hi <%= @user.name %>
+
+You've been invited to test the <%= @group.app.name %> app.
+
+You can now start testing <%= @group.app.name %> app and we will notify you if a new version is a available.
+
+<% if @group.main_release.present? || @group.second_release.present? %>
+  Download <%= @group.app.name %> app now: <%= mobile_app_url(@group.app) %>
+<% end %>
+<% unless @user.tum_id.blank? %>
+  Please log in with your TUM-Identifier (<%= @user.tum_id %>). %>
+<% end %>

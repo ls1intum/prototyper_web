@@ -1,0 +1,13 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  name: Soundflake
+  bundle_id: com.apple.soundflake
+  icon: test.jpg
+  user_id: 1
+
+two:
+  name: In|Forming
+  bundle_id: de.adesso.informing
+  icon: test.jpg
+  user_id: 1

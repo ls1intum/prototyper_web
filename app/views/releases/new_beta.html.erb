@@ -1,0 +1,35 @@
+<% provide(:title, 'New Xcode Build | ' + @app.name) %>
+<h1>New release from Xcode project</h1>
+
+<div class="row">
+  <div class="col-md-6 col-md-offset-3">
+    <%= form_for(@beta, url: app_releases_path(@app)) do |f| %>
+      <%= render 'shared/error_messages', object: f.object %>
+
+      <% if @branches.empty? %>
+        <div class="alert alert-warning">Make sure you connected the right bamboo project in the <%= link_to "app settings", edit_app_url(@app) %>.</div>
+      <% else %>
+        <p>
+          Linked Bamboo Build Plan: <%= link_to "#{@app.bamboo_project}-#{@app.bamboo_plan}", "https://bamboobruegge.in.tum.de/browse/#{@app.bamboo_project}-#{@app.bamboo_plan}", target: "_blank" %>
+        </p>
+
+        <div class="form-group">
+          <%= f.label :bamboo_branch, "Bamboo Branch *" %>
+          <%= f.select :bamboo_branch, options_for_select(@branches.collect {|p| [ p[:name], p[:key] ] }, @branches.first[:key]), {}, { class: "selectpicker", 'data-live-search': "true", 'data-width': "100%" }  %>
+        </div>
+        <%= f.hidden_field :type, :value => Beta.name %>
+
+        <div class="form-group">
+          <%= f.label :build_key, "Build *" %><br>
+          <% if @builds.empty? %>
+            <%= f.select :build_key, options_for_select([]),
+                { include_blank: "No builds found..." }, { class: "selectpicker", 'data-live-search': "true", 'data-width': "100%", enabled: false } %><br>
+          <% else %>
+            <%= f.select :build_key, options_for_select(@builds.collect {|p| [ "Build #{p[:number]} (#{p[:time_ago]})", p[:resultKey] ] }, @builds.first[:resultKey]), {}, { class: "selectpicker", 'data-live-search': "true", 'data-width': "100%" } %>
+          <% end %>
+        </div>
+        <%= f.submit "Create new release", class: "btn btn-primary" %>
+      <% end %>
+    <% end %>
+  </div>
+</div>

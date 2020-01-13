@@ -1,0 +1,78 @@
+<% provide(:title, 'Edit app') %>
+<h1>Edit app</h1>
+
+<div class="row">
+  <div class="col-md-6 col-md-offset-3">
+    <%= form_for(@app, html: { multipart: true }) do |f| %>
+      <%= render 'shared/error_messages', object: f.object %>
+
+      <div class="form-group">
+        <%= f.label :name, "Name *" %>
+        <%= f.text_field :name, class: 'form-control', placeholder: "Example app", required: true %>
+      </div>
+
+      <div class="form-group">
+        <%= f.label :bundle_id, "Bundle Identifier *" %>
+        <div class="input-group">
+          <span class="input-group-addon" id="sizing-addon2">de.tum.in.www1.</span>
+          <%= f.text_field :bundle_id, class: 'form-control', placeholder: "your_app_name", required: true, disabled: !current_user.admin, value: @bundle_id  %>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <%= f.label :description, "Description" %>
+        <%= f.text_area :description, class: 'form-control' %>
+      </div>
+
+      <div class="form-group">
+        <%= f.label :icon, "App Icon" %>
+        <%= f.file_field :icon, accept: 'image/png' %>
+      </div>
+
+      <div class="form-group">
+        <%= f.label :slack_channel, "Slack channel (in the iPraktikum group)" %><br>
+        <%= f.text_field :slack_channel, class: 'form-control', placeholder: "some_channel" %>
+      </div>
+
+      <div class="form-group">
+        <%= f.label :jira_project_id, "JIRA Project ID" %><br>
+        <%= f.text_field :jira_project_id, class: 'form-control'%>
+      </div>
+
+      <div class="form-group">
+        <%= f.label "Limitations:" %></br>
+        <%= f.label :ipad_only, class: "checkbox inline" do %>
+          <%= f.check_box :ipad_only %>
+          <span>iPad only</span>
+        <% end %>
+      </div>
+
+      <% if current_user.bamboo_access_token.nil? %>
+        <div class="alert alert-warning">To connect an app with a bamboo project you need to link your bamboo account first in your  <%= link_to "user account settings", edit_user_url(current_user) %>.</div>
+      <% else %>
+        <div class="form-group">
+          <%= f.label :bamboo_project %><br>
+          <%= f.select :bamboo_project, options_for_select(@bamboo_projects.collect {|p| [ p[:name], p[:key] ] }),
+                { include_blank: @app.bamboo_project.nil? ? "No project" : @app.bamboo_project }, { class: "selectpicker", 'data-live-search': "true", 'data-width': "100%" } %><br>
+        </div>
+
+        <div class="form-group">
+          <%= f.label :bamboo_plan %><br>
+          <%= f.select :bamboo_plan, [], { include_blank: @app.bamboo_plan.nil? ? "Specify project first" : @app.bamboo_plan, disabled: true },
+                { class: "selectpicker", 'data-live-search': "true", 'data-width': "100%" } %><br>
+        </div>
+      <% end %>
+
+      <%= f.submit "Update app", class: "btn btn-primary" %>
+    <% end %>
+  </div>
+</div>
+
+<script type="text/javascript">
+  $('#micropost_picture').bind('change', function() {
+    var size_in_megabytes = this.files[0].size/1024/1024;
+    if (size_in_megabytes > 5) {
+      alert('Maximum file size is 5MB. Please choose a smaller file.');
+    }
+  });
+</script>

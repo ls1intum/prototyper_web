@@ -1,0 +1,19 @@
+<tr>
+  <td>
+    <%= link_to group.name, edit_app_group_path(@app, group) %>
+  </td>
+  <td>
+    <%= link_to group.users.length, edit_app_group_path(@app, group) %>
+  </td>
+  <td>
+    <%= link_to edit_app_group_path(@app, group) do %>
+      <span class="glyphicon glyphicon-edit action-button"></span>
+    <% end %>
+    <% if current_user.admin %>
+      <%= link_to app_group_path(@app, group), method: :delete,
+                                      data: { confirm: "Are you sure?" } do %>
+        <span class="glyphicon glyphicon-trash action-button"></span>
+      <% end %>
+    <% end %>
+  </td>
+</tr>

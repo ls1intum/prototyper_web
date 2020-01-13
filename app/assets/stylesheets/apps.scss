@@ -1,0 +1,47 @@
+
+.thumbnail {
+    border: none;
+    padding: 0;
+    .caption {
+      text-align: center;
+    }
+}
+
+.row {
+  margin-bottom: 20px;
+}
+
+.icon {
+  border-radius: 16%; border: 1px
+}
+
+.media .media-left {
+  .icon {
+    margin-right: 10px;
+    width: 90px;
+    height: 90px;
+    float: left;
+  }
+}
+
+tr .action-button {
+  padding-right: 5px;
+}
+
+.newApp {
+
+}
+
+.extra_info {
+  padding-top: 20px;
+}
+
+.icon_preview {
+  width: 150px;
+  height: 150px;
+  border-radius: 16%;
+  border: 1px;
+  display: block;
+  margin: 0 auto;
+  margin-bottom: 10px;
+}

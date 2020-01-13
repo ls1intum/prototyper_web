@@ -1,0 +1,21 @@
+<h1>Hi <%= @user.name %></h1>
+
+<p>Version <%= @release.version %> of the <%= @release.app.name %> app is ready for you!</p>
+
+<p>
+  Tap "Download" to download Version <%= @release.version %> of the <%= @release.app.name %> app.
+</p>
+
+<div>
+  <b>Release Notes:</b>
+  <p><%= simple_format(@release.description).html_safe %></p>
+</div>
+
+<%= link_to mobile_app_release_url(app_id: @release.app.id, id:@release.id,
+                group_id: @group.id, main_release: @main_release, token: @token, email: @user.email), target: "_blank" do %>
+  <button type="button" class="btn btn-primary" style="width:100%; height: 40px;">Download</button>
+<% end %>
+
+<p>
+  You received this E-Mail as a member of the <%= @group.name %> group.
+</p>

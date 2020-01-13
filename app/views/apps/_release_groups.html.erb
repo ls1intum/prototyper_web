@@ -1,0 +1,28 @@
+<h3>Release groups</h3>
+<div class="table-responsive">
+  <table class="table">
+    <thead>
+      <tr>
+        <th>Group</th>
+        <th>Members</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <%= render @app.groups %>
+    </tbody>
+  </table>
+</div>
+
+<%= form_for [@app, @app.groups.build] do |f| %>
+  <%= render 'shared/error_messages', object: f.object %>
+
+  <div class="input-group">
+    <%= f.text_field :name, class: 'form-control', placeholder: "Group name" %>
+    <span class="input-group-btn">
+      <%= f.submit "Add release group", class: "btn btn-primary" do %>
+        <span class="glyphicon glyphicon-plus"></span>
+      <% end %>
+    </span>
+  </div>
+<% end %>

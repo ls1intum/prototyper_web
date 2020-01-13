@@ -1,0 +1,43 @@
+<tr id="release_row-<%= prototype.id %>" class="prototype_row" app_id="<%= @app.id %>" release_id="<%= prototype.id %>">
+  <td>
+    <%= link_to app_release_path(@app, prototype) do %>
+      <%= image_tag(app_release_icon_url(@app, prototype), alt: prototype.version, class: "icon") %>
+    <% end %>
+  </td>
+  <td class="hidden-xs hidden-sm col-md-4">
+    <%= link_to prototype.url, prototype.url, target: "_blank" %>
+  </td>
+  <td class="hidden-xs hidden-sm">
+    <%= prototype.created_at.strftime("%d.%m.%Y %H:%M (Munich Time)") %>
+  </td>
+  <td>
+    <%= link_to prototype.downloads.count, app_release_downloads_path(@app, prototype) %>
+  </td>
+  <td>
+    <%= link_to "#{prototype.feedbacks.where(:completed => false).count}/#{prototype.feedbacks.count}", app_release_feedbacks_path(@app, prototype) %>
+  </td>
+  <td>
+    <% if prototype.builds.empty? %>
+      <p class="status">Loading...</p>
+    <% else %>
+      <p class="status">Succeeded</p>
+    <% end %>
+  </td>
+  <td>
+    <% if current_user.admin %>
+      <%= link_to app_release_path(@app, prototype), method: :delete,
+                                    data: { confirm: "Are you sure?" } do %>
+        <span class="glyphicon glyphicon-trash action-button"></span>
+      <% end %>
+    <% end %>
+    <%= link_to app_release_web_container_path(@app, prototype), target: "_blank" do %>
+      <span class="glyphicon glyphicon-eye-open action-button"></span>
+    <% end %>
+    <%= link_to app_release_container_path(@app, prototype), target: "_blank" do %>
+      <span class="glyphicon glyphicon-download-alt action-button"></span>
+    <% end %>
+    <%= link_to app_release_report_path(@app, prototype) do %>
+      <span class="glyphicon glyphicon-list-alt action-button"></span>
+    <% end %>
+  </td>
+</tr>

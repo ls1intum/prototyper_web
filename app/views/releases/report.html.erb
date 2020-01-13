@@ -1,0 +1,32 @@
+<h1>Report Ver. <%= @release.version %></h1>
+<table class="table">
+  <tr>
+    <th>Release created</th>
+    <td><%= @release.created_at.strftime("%d.%m.%Y %H:%M (Munich Time)") %></td>
+  </tr>
+</table>
+<% @releaseLogs.each do |releaseLog| %>
+  <% unless releaseLog.group.nil? %>
+    <h3><%= releaseLog.group.nil? ? "No group" : releaseLog.group.name %></h3>
+    <table class="table">
+      <tr>
+        <th>Type</th>
+        <td><%= releaseLog.is_main_release ? "Release" : "Additional release" %></td>
+      </tr>
+      <tr>
+        <th>Delivered to Group</th>
+        <td><%= releaseLog.created_at.strftime("%d.%m.%Y %H:%M (Munich Time)") %></td>
+      </tr>
+      <tr>
+        <th>Received by Group</th>
+        <% download = @release.downloads.where(:user => releaseLog.group.users).order(:created_at).first %>
+        <td><%= download.nil? ? "Never" : download.created_at.strftime("%d.%m.%Y %H:%M (Munich Time)") %></td>
+      </tr>
+      <tr>
+        <th>Feedback on</th>
+        <% feedback = @release.feedbacks.where(:user => releaseLog.group.users).order(:created_at).first %>
+        <td><%= feedback.nil? ? "Never" : feedback.created_at.strftime("%d.%m.%Y %H:%M (Munich Time)") %></td>
+      </tr>
+    </table>
+  <% end %>
+<% end %>

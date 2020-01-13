@@ -1,0 +1,39 @@
+<tr id="release_row-<%= beta.id %>" class="beta_row">
+  <td>
+    <%= link_to app_release_path(@app, beta) do %>
+      <%= image_tag(app_release_icon_url(@app, beta), alt: beta.version, class: "icon") %>
+    <% end %>
+  </td>
+  <td class="hidden-xs hidden-sm col-md-4">
+    <% build_id = (beta.builds.first.nil? || beta.builds.first.bundle_version.nil? ? beta.bamboo_branch : beta.builds.first.bundle_version) %>
+    <%= link_to build_id, "https://bamboobruegge.in.tum.de/browse/#{beta.build_key}", target: "_blank" %>
+  </td>
+  <td class="hidden-xs hidden-sm">
+    <%= beta.created_at.strftime("%d.%m.%Y %H:%M (Munich Time)") %>
+  </td>
+  <td>
+    <%= link_to beta.downloads.count, app_release_downloads_path(@app, beta) %>
+  </td>
+  <td>
+    <%= link_to "#{beta.feedbacks.where(:completed => false).count}/#{beta.feedbacks.count}", app_release_feedbacks_path(@app, beta) %>
+  </td>
+  <td>
+    <%= beta.builds.empty? ? "Failed" : "Succeeded" %>
+  </td>
+  <td>
+    <% if current_user.admin %>
+      <%= link_to app_release_path(@app, beta), method: :delete,
+                                    data: { confirm: "Are you sure?" } do %>
+        <span class="glyphicon glyphicon-trash action-button"></span>
+      <% end %>
+    <% end %>
+    <% unless beta.builds.first.nil? %>
+      <%= link_to beta.builds.first.ipa_url, target: "_blank" do %>
+        <span class="glyphicon glyphicon-download-alt action-button"></span>
+      <% end %>
+    <% end %>
+    <%= link_to app_release_report_path(@app, beta) do %>
+      <span class="glyphicon glyphicon-list-alt action-button"></span>
+    <% end %>
+  </td>
+</tr>

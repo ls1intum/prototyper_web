@@ -1,0 +1,27 @@
+<% provide(:title, 'New Marvel Mockup | ' + @app.name) %>
+<h1>New release from Marvel mockup</h1>
+
+<div class="row">
+  <div class="col-md-6 col-md-offset-3">
+    <%= form_for(@prototype, url: app_releases_path(@app)) do |f| %>
+      <%= render 'shared/error_messages', object: f.object %>
+
+      <div class="form-group">
+        <%= f.label :url, "Marvel-URL *" %>
+        <%= f.text_field :url, class: 'form-control', placeholder: "http://marvelapp.com/ididid", required: true %>
+      </div>
+
+      <div class="form-group">
+        <%= f.label "Delivery options:" %></br>
+        <%= f.label :hide_statusbar, class: "checkbox inline" do %>
+          <%= f.check_box :hide_statusbar %>
+          <span>Hide statusbar on device</span>
+        <% end %>
+      </div>
+
+      <%= f.hidden_field :type, :value => Prototype.name %>
+
+      <%= f.submit "Create new release", class: "btn btn-primary" %>
+    <% end %>
+  </div>
+</div>

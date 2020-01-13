@@ -1,0 +1,60 @@
+<% provide(:title, @app.name) %>
+<hr>
+<div class="media app-header">
+  <div class="media-left">
+    <a href="#">
+      <%= image_tag(@app.icon.url, class: "icon") %>
+    </a>
+  </div>
+  <div class="media-body">
+    <div class="media-body-content">
+      <h4><%= @app.name %></h4>
+      <p>
+        <%= simple_format(@app.description).html_safe %>
+      </p>
+    </div>
+  </div>
+</div>
+<hr>
+
+<% @groups.each do |group| %>
+  <% if @groups.length > 1 %>
+    <h4>As a member of the <%= group.name %> group</h4>
+  <% end %>
+  <table class="table borderless" id="mobile_release_table">
+    <tbody>
+      <tr>
+        <% unless group.main_release.nil? && group.second_release.nil? %>
+          <% unless group.main_release.nil? %>
+            <td class="col-xs-6">
+              <% if group.second_release.present? %>
+                <p>Release A</p>
+              <% end %>
+              <%= link_to mobile_app_release_path(app_id: @app.id, id:group.main_release.id, group_id: group.id, main_release: true) do %>
+                <%= image_tag(app_release_icon_url(@app, group.main_release), alt: group.main_release.version, class: "icon") %>
+                <p>Download</p>
+              <% end %>
+            </td>
+          <% end %>
+          <% unless group.second_release.nil? %>
+            <td class="col-xs-6">
+              <p>Release B</p>
+              <%= link_to mobile_app_release_path(app_id: @app.id, id:group.second_release.id, group_id: group.id, main_release: false) do %>
+                <%= image_tag(app_release_icon_url(@app, group.second_release), alt: group.second_release.version, class: "icon") %>
+                <p>Download</p>
+              <% end %>
+            </td>
+          <% end %>
+        <% end %>
+      </tr>
+    </tbody>
+  </table>
+<% end %>
+
+<% if @groups.length == 1 && ((@groups.first.main_release.present? && @groups.first.second_release.nil?) || (@groups.first.main_release.nil? && @groups.first.second_release.present?)) %>
+  <p>You are member of the release group <%= @groups.first.name %> <p>
+<% end %>
+
+<div class="debug-info">
+  <p><%= @app.bundle_id %></p>
+</div>

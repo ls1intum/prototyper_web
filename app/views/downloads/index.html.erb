@@ -1,0 +1,35 @@
+<% provide(:title, "Downloads | #{@app.name} #{@release.version} | Prototyper") %>
+
+<h3>Downloads</h3>
+
+<div class="table-responsive">
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>User</th>
+        <th>Email</th>
+        <th>Downloaded</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @downloads.each do |download| %>
+        <tr>
+          <th><%= download.id %></th>
+          <td><%= download.user.name %></td>
+          <td><%= download.user.email %></td>
+          <td><%= download.created_at.strftime("%d.%m.%Y %H:%M (Munich Time)") %></td>
+          <td>
+            <% if current_user.admin %>
+              <%= link_to app_release_download_path(@app, @release, download), method: :delete,
+                                            data: { confirm: "Are you sure?" } do %>
+                <span class="glyphicon glyphicon-trash action-button"></span>
+              <% end %>
+            <% end %>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>

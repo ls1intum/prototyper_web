@@ -1,0 +1,25 @@
+// Place all the styles related to the Feedbacks controller here.
+// They will automatically be included in application.css.
+// You can use Sass (SCSS) here: http://sass-lang.com/
+
+.user {
+  text-align: center;
+
+  .avatar img {
+    border-radius: 10%;
+  }
+}
+
+
+.feedback {
+  .title {
+    font-weight: bold;
+    font-size: 18px;
+  }
+
+  .creation_date {
+    font-size: 13px;
+    font-style: italic;
+    margin-top: 10px;
+  }
+}

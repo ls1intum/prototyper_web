@@ -1,0 +1,1 @@
+<%= select_tag "beta[build_key]", options_for_select(@builds.collect {|p| [ "Build #{p[:number]} (#{p[:time_ago]})", p[:resultKey] ] }, @builds.first[:resultKey]), { class: "selectpicker", 'data-live-search': "true", 'data-width': "100%" } %>

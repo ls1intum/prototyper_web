@@ -1,0 +1,47 @@
+<% provide(:title, @app.name) %>
+<hr>
+<div class="media app-header">
+  <div class="media-left">
+    <a href="#">
+      <%= image_tag(app_release_icon_url(@app, @release), alt: @release.version, class: "icon") %>
+    </a>
+  </div>
+  <div class="media-body">
+    <div class="media-body-content">
+      <h4><%= @app.name %></h4>
+      <p>Created <%= @release.created_at.strftime("%d.%m.%Y %H:%M (Munich Time)") %></br></p>
+    </div>
+  </div>
+</div>
+<hr>
+<p>
+  <b>Release notes:</b>
+  <%= simple_format(@release.description).html_safe %>
+</p>
+<div class="download-div">
+  <% if browser.platform.ios? %>
+    <% if !@app.ipad_only || browser.device.ipad? %>
+      <%= link_to "itms-services://?action=download-manifest&url=#{@manifest_url}" do %>
+        <button type="button" class="btn btn-primary btn-lg center-block" style="width: 100%"
+            onclick="return saveDownload('<%= app_release_downloads_path(@app, @release) %>')">
+          Download
+        </button>
+      <% end %>
+    <% else %>
+      <p><b>This app is iPad only.</b></p>
+    <% end %>
+  <% end %>
+</div>
+<div class="install-info">
+  <b>On first run:</b><br>
+  <ul>
+    <li>Navigate on your iDevice to<br> Settings > General > Profiles &amp; Device Mgm.</li>
+    <li>Choose the TUM profile and tap the „Trust“ button</li>
+    <li>Open the <%= @app.name %> app on the homescreen.</li>
+  </ul>
+  <%= link_to "Detailed Instructions", instructions_url %>
+</div>
+
+<div class="debug-info">
+  <p><%= @app.bundle_id %></p>
+</div>

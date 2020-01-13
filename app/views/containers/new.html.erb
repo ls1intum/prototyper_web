@@ -1,0 +1,19 @@
+<% provide(:title, 'New Prototyper Container | ' + @app.name) %>
+<h1>New release from Marvel mockup</h1>
+
+<div class="row">
+  <div class="col-md-6 col-md-offset-3">
+    <%= form_for(@container, url: app_containers_path(@app)) do |f| %>
+      <%= render 'shared/error_messages', object: f.object %>
+
+      <div class="form-group">
+        <%= f.label :marvel_url, "Marvel-URL *" %>
+        <%= f.text_field :marvel_url, class: 'form-control', placeholder: "http://marvelapp.com/ididid", required: true %>
+      </div>
+
+      <%= f.hidden_field :type, :value => "Container" %>
+
+      <%= f.submit "Create new container", class: "btn btn-primary" %>
+    <% end %>
+  </div>
+</div>

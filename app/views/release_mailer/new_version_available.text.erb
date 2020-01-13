@@ -1,0 +1,11 @@
+Hi <%= @user.name %>!
+
+Version <%= @release.version %> of the <%= @release.app.name %> app is ready for you!
+
+Release Notes:
+<%= simple_format(@release.description) %>
+
+Download at: <%= mobile_app_release_url(app_id: @release.app.id, id:@release.id,
+                group_id: @group.id, main_release: @main_release, token: @token, email: @user.email) %>
+
+You received this E-Mail as a member of the <%= @group.name %> group.

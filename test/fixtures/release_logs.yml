@@ -1,0 +1,11 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  release_id: 
+  group_id: 
+  isMainRelease: false
+
+two:
+  release_id: 
+  group_id: 
+  isMainRelease: false

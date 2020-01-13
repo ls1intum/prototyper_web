@@ -1,0 +1,44 @@
+<h3>App Developers</h3>
+<div class="table-responsive">
+  <table class="table">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>E-Mail</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @admins.each do |admin| %>
+        <tr>
+          <td>
+            <%= admin.name %>
+          </td>
+          <td>
+            <%= admin.email %>
+          </td>
+          <td>
+            <% if admin.id != current_user.id %>
+              <%= link_to app_admin_path(@app, admin), method: :delete,
+                                            data: { confirm: "Are you sure?" } do %>
+                <span class="glyphicon glyphicon-trash action-button"></span>
+              <% end %>
+            <% end %>
+          </td>
+        <tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>
+
+<%= form_tag app_admins_path(@app) do %>
+  <div class="input-group">
+    <%= select_tag "user_id", options_for_select(@users.collect {|user| [ "#{user.name} (#{user.tum_id || user.email})", user.id ] }),
+          { include_blank: "No user selected", class: "selectpicker", 'data-live-search': "true", 'data-width': "100%" } %><br>
+    <span class="input-group-btn">
+      <%= submit_tag "Add developer", class: "btn btn-primary" do %>
+        <span class="glyphicon glyphicon-plus"></span>
+      <% end %>
+    </span>
+  </div>
+<% end %>

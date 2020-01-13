@@ -1,0 +1,29 @@
+<% provide(:title, 'New feedback') %>
+<h1>New Feedback</h1>
+
+<div class="row">
+  <div class="col-md-6 col-md-offset-3">
+    <%= form_for(@feedback, html: { multipart: true }, url: app_release_feedbacks_path(@app, @release)) do |f| %>
+      <%= render 'shared/error_messages', object: f.object %>
+
+      <div class="form-group">
+        <%= f.label :title %>
+        <%= f.text_field :title, class: 'form-control',
+                          placeholder: "Sample title" %>
+      </div>
+
+      <div class="form-group">
+        <%= f.label :text %>
+        <%= f.text_area :text, class: 'form-control',
+                                placeholder: "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut" %>
+      </div>
+
+      <div class="form-group">
+        <%= f.label :screenshot %>
+        <%= f.file_field :screenshot, accept: 'image/png,image/jpeg' %>
+      </div>
+      
+      <%= f.submit "Send feedback", class: "btn btn-primary" %>
+    <% end %>
+  </div>
+</div>

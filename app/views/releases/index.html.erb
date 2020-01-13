@@ -1,0 +1,22 @@
+<% provide(:title, "Releases | #{@app.name}") %>
+<div class="row">
+  <div class="col-xs-12 col-md-12">
+    <h3>Prototypes</h3>
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Version</th>
+          <th>URL</th>
+          <th>Downloads</th>
+          <th>Feedback</th>
+          <th>Created at</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <%= render @prototypes %>
+      </tbody>
+    </table>
+
+  </div>
+</div>

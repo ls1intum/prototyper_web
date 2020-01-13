@@ -1,0 +1,86 @@
+<h3><%= "#{@release.app.name} #{@release.version}" %></h3>
+<table class="table">
+  <tbody>
+    <tr>
+      <td>
+        Version
+      </td>
+      <td>
+        <%= @release.version %>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        Created
+      </td>
+      <td>
+        <%= @release.created_at.strftime("%d.%m.%Y %H:%M (Munich Time)") %>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        Updated
+      </td>
+      <td>
+        <%= @release.updated_at.strftime("%d.%m.%Y %H:%M (Munich Time)") %>
+      </td>
+    </tr>
+    <% if @release.url %>
+    <tr>
+      <td>
+        URL
+      </td>
+      <td>
+        <%= @release.url %>
+      </td>
+    </tr>
+    <% end %>
+    <tr id="status">
+      <td>
+        State
+      </td>
+      <td>
+        <%= @status_text %>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+<% if @release.description.present? %>
+  <p>
+    <h3>Release notes:</h3>
+    <%= simple_format(@release.description).html_safe %>
+  </p>
+<% end %>
+
+<h3>Feedback</h3>
+<div class="row feedback-header">
+  <div class="col-md-2 col-sm-2">
+    Author
+  </div>
+  <div class="col-md-6 col-sm-6">
+    Description
+  </div>
+  <div class="col-md-2 col-sm-2">
+    Screenshot
+  </div>
+  <div class="col-md-1 col-sm-1">
+    Discussed
+  </div>
+  <div class="col-md-1 col-sm-1">
+    Jira
+  </div>
+</div>
+<hr>
+<%= render @release.feedbacks %>
+
+<div class="modal fade modal-admin" id="imagemodal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-body">
+      	<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+        <img src="" class="imagepreview" >
+      </div>
+    </div>
+  </div>
+</div>

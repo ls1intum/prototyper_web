@@ -1,0 +1,6 @@
+Hi <%= @user.name %>,
+
+Welcome to Prototyper! Click on the link below to activate your account. If you didn't create your account
+yourself, change your password immediately in the settings.
+
+<%= edit_account_activation_url(@activation_token, email: @user.email) %>

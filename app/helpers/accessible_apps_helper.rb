@@ -1,0 +1,2 @@
+module AccessibleAppsHelper
+end

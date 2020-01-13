@@ -1,0 +1,89 @@
+<% provide(:title, @app.name) %>
+<hr>
+<div class="media app-header">
+  <div class="media-left">
+    <a href="#">
+      <%= image_tag(@app.icon.url, class: "icon") %>
+    </a>
+  </div>
+  <div class="media-body">
+    <div class="media-body-content">
+      <h4>
+        <%= @app.name %>
+        <%= link_to edit_app_path(@app,) do %>
+          <span class="glyphicon glyphicon-edit action-button"></span>
+        <% end %>
+        <% if current_user.admin %>
+          <%= link_to app_path(@app), method: :delete,
+                                        data: { confirm: "Are you sure?" } do %>
+            <span class="glyphicon glyphicon-trash action-button"></span>
+          <% end %>
+        <% end %>
+      </h4>
+      <h5><%= @app.bundle_id %></h5>
+      <p>
+        Created <%= @app.created_at.strftime("%d.%m.%Y %H:%M (Munich Time)") %></br>
+      </p>
+    </div>
+  </div>
+</div>
+<hr>
+<% unless @app.description.nil? || @app.description.empty? %>
+  <h4>Description</h4>
+  <p><%= simple_format(@app.description).html_safe %></p>
+  <hr>
+<% end %>
+
+<ul class="nav nav-tabs content-nav">
+  <li class="active"><a data-toggle="tab" href="#releases">Release Management</a></li>
+  <li><a data-toggle="tab" href="#user_management">User Management</a></li>
+</ul>
+
+<div class="tab-content" id="content-nav">
+  <div id="releases" class="tab-pane fade in active">
+    <div id="new_release" class="row">
+      <div class="col-xs-4 col-md-4">
+        <%= link_to app_releases_new_prototype_path(@app) do %>
+          <button type="button" class="btn btn-default btn-block">
+            <i class="fa fa-plus"></i>
+            Create release from Marvel mockup
+          </button>
+        <% end %>
+      </div>
+      <div class="col-xs-4 col-md-4">
+        <%= link_to app_releases_new_beta_path(@app) do %>
+          <button type="button" class="btn btn-default btn-block">
+            <i class="fa fa-plus"></i>
+            Create release from Xcode project
+          </button>
+        <% end %>
+      </div>
+      <div class="col-xs-4 col-md-4">
+        <%= link_to new_app_container_path(@app) do %>
+          <button type="button" class="btn btn-default btn-block">
+            <i class="fa fa-plus"></i>
+            Download container for Prototyper Framework
+          </button>
+        <% end %>
+      </div>
+    </div>
+    <div id="delivery">
+      <%= render 'release_matrix' %>
+    </div>
+    <div id="manage_releases">
+      <%= render 'manage_releases' %>
+    </div>
+    <p class="extra_info">
+      Include the <a href="https://github.com/grafele/Prototyper" target="_blank">Prototyper framework</a> in your Xcode project to use marvel mockups inside your app.
+    </p>
+  </div>
+  <div id="user_management" class="tab-pane fade">
+    <div id="release_groups">
+      <%= render 'release_groups' %>
+    </div>
+    <hr>
+    <div id="release_manager">
+      <%= render 'release_manager' %>
+    </div>
+  </div>
+</div>

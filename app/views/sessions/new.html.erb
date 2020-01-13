@@ -1,0 +1,47 @@
+<% provide(:title, "Log in") %>
+
+<div class="row">
+  <div class="col-md-6 col-md-offset-3">
+    <h1>Log in</h1>
+
+    <p>
+      Please log in with your TUM ID (eg. ga27nix). In case you have no TUM ID please login with your personal account.
+    </p>
+
+    <%= form_for(:session, url: login_path) do |f| %>
+
+      <div class="form-group">
+        <%= f.label :email, "TUM-ID or E-Mail" %>
+        <div class="input-group">
+          <span class="input-group-addon" id="sizing-addon2">
+            <%= fa_icon "envelope", class: "fa-fw" %>
+          </span>
+          <%= f.text_field :email, class: 'form-control', placeholder: 'ga82abc' %>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <%= f.label :password %>
+        <div class="input-group">
+          <span class="input-group-addon">
+            <%= fa_icon "unlock-alt", class: "fa-fw" %>
+          </span>
+          <%= f.password_field :password, class: 'form-control', placeholder: '********'%>
+        </div>
+      </div>
+
+      <%= f.label :remember_me, class: "checkbox inline" do %>
+        <%= f.check_box :remember_me %>
+        <span>Remember me on this computer</span>
+      <% end %>
+
+      <%= f.submit "Log in", class: "btn btn-primary" %>
+    <% end %>
+
+    <p><%= link_to "Forgot password?", new_password_reset_path %></p>
+    <br>
+    <p>
+      Welcome to <b><i>Prototyper</i></b>, a next generation mobile software delivery solution.
+    </p>
+  </div>
+</div>

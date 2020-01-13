@@ -1,0 +1,1 @@
+<%= select_tag "app[bamboo_plan]", options_for_select(@bamboo_plans.collect {|p| [ p[:name], p[:key] ] }), { include_blank: "No plan selected", class: "selectpicker", 'data-live-search': "true" } %>

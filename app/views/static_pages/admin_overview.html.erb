@@ -1,0 +1,113 @@
+<% provide(:title, "Admin overview") %>
+<h1>Admin Overview</h1>
+<h3>Apps</h3>
+<div class="table-responsive">
+  <table class="table table-hover">
+    <thead>
+      <tr>
+        <th>Title</th>
+        <th>Bundle ID</th>
+        <th>Created</th>
+        <th>Last update</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @apps.each do |app| %>
+        <tr>
+          <td><%= app.name %></td>
+          <td><%= app.bundle_id %></td>
+          <td><%= app.created_at.strftime("%d.%m.%Y %H:%M (Munich Time)") %></td>
+          <td><%= app.updated_at.strftime("%d.%m.%Y %H:%M (Munich Time)") %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>
+<hr><hr>
+<% @apps.each do |app| %>
+  <% releases = app.releases %>
+
+  <h3><%= app.name %> release details</h3>
+  <div class="table-responsive">
+    <table class="table table-hover">
+      <thead>
+        <tr>
+          <th>Version</th>
+          <th>Created</th>
+          <th>Type</th>
+          <th>Feedback</th>
+          <th>Downloads</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% releases.each do |release| %>
+          <tr>
+            <td><%= release.version %></td>
+            <td><%= release.created_at.strftime("%d.%m.%Y %H:%M (Munich Time)") %></td>
+            <td><%= release.type == "Prototype" ? "Marvel Prototype" : "Xcode Build" %></td>
+            <td><%= release.feedbacks.length %></td>
+            <td><%= release.downloads.length %></td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+
+  <h3><%= app.name %> releases to release groups</h3>
+  <div class="table-responsive">
+    <table class="table table-hover">
+      <thead>
+        <tr>
+          <th>Version</th>
+          <th>Date</th>
+          <th>Group</th>
+          <th>Type</th>
+          <th>Changelog</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% releases.each do |release| %>
+          <% release.releaseLogs.each do |releaseLog| %>
+            <tr>
+              <td><%= release.version %></td>
+              <td><%= releaseLog.created_at.strftime("%d.%m.%Y %H:%M (Munich Time)") %></td>
+              <td><%= releaseLog.group.nil? ? "No group" : releaseLog.group.name %></td>
+              <td><%= releaseLog.is_main_release ? "Release" : "Additional release" %></td>
+              <td><%= releaseLog.changelog %></td>
+            </tr>
+          <% end %>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+
+  <h3><%= app.name %> feedback</h3>
+  <div class="table-responsive">
+    <table class="table table-hover">
+      <thead>
+        <tr>
+          <th>Version</th>
+          <th>Created</th>
+          <th>User</th>
+          <th>Title</th>
+          <th>Text</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% releases.each do |release| %>
+          <% release.feedbacks.each do |feedback| %>
+            <tr>
+              <td><%= release.version %></td>
+              <td><%= feedback.created_at.strftime("%d.%m.%Y %H:%M (Munich Time)") %></td>
+              <td><%= feedback.user.nil? ? "Anonymous" : feedback.user.name %></td>
+              <td><%= feedback.title %></td>
+              <td><%= feedback.text %></td>
+            </tr>
+          <% end %>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+
+  <hr>
+<% end%>

@@ -1,0 +1,45 @@
+<a class="anchor" id="<%= feedback.id %>"></a>
+<div class="row">
+  <div class="col-md-2 col-sm-2 user">
+    <div class="avatar">
+      <%= gravatar_for(feedback.user) %>
+    </div>
+    <div class="username">
+      <%= feedback.user.nil? ? (feedback.username.present? ? feedback.username : "Anonymous") : feedback.user.name %>
+    </div>
+  </div>
+  <div class="col-md-6 col-sm-6 feedback">
+    <div class="text">
+      <%= feedback.text %>
+    </div>
+    <div class="creation_date">
+      <%= feedback.updated_at.strftime("%d.%m.%Y %H:%M (Munich Time)") %> <%= "- Feedback ID #{feedback.id}" %>
+    </div>
+  </div>
+  <div class="col-md-2 col-sm-2 screenshot">
+    <% if feedback.screenshot.url %>
+      <%= link_to "#", class: "pop" do %>
+        <%= image_tag(feedback.screenshot.url, alt: "Screenshot", class: "screenshot-img") %>
+      <% end %>
+    <% end %>
+  </div>
+  <div class="col-md-1 col-sm-1 checkbox-div">
+    <%= check_box_tag :completed, feedback.id, feedback.completed,
+      data: {
+        remote: true,
+        url: app_release_feedback_toggle_url(@app, @release, feedback),
+        method: "POST"
+      }, class: "completed_checkbox" %>
+  </div>
+  <div class="col-md-1 col-sm-1">
+    <%
+      summary = "Feedback #{feedback.id} for Ver. #{@release.version} of #{@app.name} app"
+      reporter = current_user.tum_id.nil? ? current_user.email : current_user.tum_id
+      description = "#{feedback.text}%0A%0A#{app_release_feedbacks_url(@app, @release)}%23#{feedback.id}"
+    %>
+    <%= link_to "https://jirabruegge.in.tum.de/secure/CreateIssueDetails!init.jspa?pid=#{@app.jira_project_id}&issuetype=3&summary=#{summary}&reporter=#{reporter}&description=#{description}", target: "_blank" do %>
+      <%= image_tag("/assets/jira.png", alt: "JIRA", class: "jira-img") %>
+    <% end %>
+  </div>
+</div>
+<hr>

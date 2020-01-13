@@ -1,0 +1,16 @@
+<% provide(:title, 'App Management') %>
+<h1>App Management</h1>
+<div class="row container">
+<% if current_user.write_permissions || current_user.admin %>
+  <%= link_to new_app_path do %>
+    <button type="button" class="btn btn-primary center-block" id="newApp">
+      New app
+      <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+    </button>
+  <% end %>
+  </div>
+<% end %>
+
+<div class="row">
+  <%= render @apps %>
+</div>

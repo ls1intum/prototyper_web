@@ -1,0 +1,15 @@
+<%
+  link_to = params[:controller] == "accessible_apps" ? mobile_app_path(app) : app
+%>
+
+<div class="col-xs-12 col-md-3">
+  <%= link_to link_to, class: "thumbnail" do %>
+    <%= image_tag app.icon.url, class: "icon", :style => 'width: 152px; height: 152px;' %>
+    <div class="caption">
+      <h3><%= truncate(app.name, length: 35) %></h3>
+      <% if params[:controller] != "accessible_apps" %>
+        <p><%= truncate(app.bundle_id, length: 35) %></p>
+      <% end %>
+    </div>
+  <% end %>
+</div>

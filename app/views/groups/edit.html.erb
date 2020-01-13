@@ -1,0 +1,77 @@
+<% provide(:title, @group.name) %>
+<h1><%= @group.name %></h1>
+
+<div class="row">
+  <div class="col-md-6 col-md-offset-3">
+    <%= form_for [@app, @group] do |f| %>
+      <%= render 'shared/error_messages', object: f.object %>
+
+      <%= f.label :name, "Group name" %>
+      <div class="input-group">
+        <%= f.text_field :name, class: 'form-control', placeholder: "Team" %>
+        <span class="input-group-btn">
+          <%= f.submit "Save", class: "btn btn-primary", style: "width: 150px;" %>
+        </span>
+      </div>
+    <% end %>
+
+    <hr>
+
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Email</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @group.users.each do |user| %>
+          <tr>
+            <td>
+              <%= user.name %>
+            </td>
+            <td>
+              <%= user.email %>
+            </td>
+            <td>
+              <%= link_to app_group_group_user_path(@app, @group, user), method: :delete,
+                                            data: { confirm: "Are you sure?" } do %>
+                <span class="glyphicon glyphicon-trash action-button"></span>
+              <% end %>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+
+    <hr>
+
+    <%= form_for(:group_user, url: app_group_group_users_path(@app, @group)) do |f| %>
+    <div class="input-group">
+        <%= select_tag "user_id", options_for_select(User.all.collect {|user| [ "#{user.name} (#{user.tum_id || user.email})", user.id ] }),
+              { include_blank: "No user selected", class: "selectpicker", 'data-live-search': "true", 'data-width': "100%" } %><br>
+        <span class="input-group-btn">
+          <%= f.submit "Invite existing user", class: "btn btn-primary", style: "width: 150px;" do %>
+            <span class="glyphicon glyphicon-plus"></span>
+          <% end %>
+        </span>
+      </div>
+      <div class="input-group">
+        <%= f.text_field :email, class: 'form-control', placeholder: "max@example.com" %>
+        <span class="input-group-btn">
+          <%= f.submit "Invite new user", class: "btn btn-primary", style: "width: 150px;" do %>
+            <span class="glyphicon glyphicon-plus"></span>
+          <% end %>
+        </span>
+      </div>
+
+    <% end %>
+    </br>
+
+    <%= link_to "#{app_url(@app)}#user_management" do %>
+      <button type="button" class="btn btn-primary" style="margin-top: 50px;">Back to <%= @app.name %> user management</button>
+    <% end %>
+
+  </div>
+</div>

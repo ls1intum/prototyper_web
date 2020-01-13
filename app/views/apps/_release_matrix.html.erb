@@ -1,0 +1,45 @@
+<h3>Release groups</h3>
+<div class="table-responsive">
+  <table class="table">
+    <thead>
+      <tr>
+        <th class="col-xs-2"></th>
+        <% @app.groups.each do |group| %>
+          <th class="col-xs-<%= @cellWidth %>"><%= group.name %></th>
+        <% end %>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <th>Release</th>
+        <% @app.groups.each do |group| %>
+          <td>
+            <a data-toggle="modal" data-target="#new_release_modal" data-group="<%= group.name %>" data-group_id="<%= group.id %>" data-is_main_release="true">
+              <% if group.main_release %>
+                <%= image_tag(app_release_icon_url(@app, group.main_release), alt: group.main_release.version, class: "icon") %>
+              <% else %>
+                <%= image_tag("/assets/default_icon.png", alt: "No release", class: "icon") %>
+              <% end %>
+            </a>
+          </td>
+        <% end %>
+      </tr>
+      <tr>
+        <th>Additional release</th>
+        <% @app.groups.each do |group| %>
+          <td>
+            <a data-toggle="modal" data-target="#new_release_modal" data-group="<%= group.name %>" data-group_id="<%= group.id %>" data-is_main_release="false">
+              <% if group.second_release %>
+                <%= image_tag(app_release_icon_url(@app, group.second_release), alt: group.second_release.version, class: "icon") %>
+              <% else %>
+                <%= image_tag("/assets/default_icon.png", alt: "No release", class: "icon") %>
+              <% end %>
+            </a>
+          </td>
+        <% end %>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<%= render 'new_release_modal' %>
