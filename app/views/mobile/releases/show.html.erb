@@ -36,9 +36,15 @@
 <div class="install-info">
   <b>On first run:</b><br>
   <ul>
-    <li>Navigate on your iDevice to<br> Settings > General > Profiles &amp; Device Mgm.</li>
-    <li>Choose the TUM profile and tap the „Trust“ button</li>
-    <li>Open the <%= @app.name %> app on the homescreen.</li>
+    <% if browser.platform.ios? %>
+      <li>Navigate on your device to<br>Settings > General > Profiles &amp; Device Mgm.</li>
+      <li>Choose the profile and tap the „Trust“ button</li>
+      <li>Open the <%= @app.name %> app on the homescreen.</li>
+    <% else %>
+      <li>Go to Menu > Settings > Security > and check Unknown Sources to allow your phone to install apps from sources other than the Google Play Store.</li>
+      <li>Wait for the download the be completed, open Downloads, tap on the APK file, and tap Yes when prompted</li>
+      <li>Follow instructions on your device.</li>
+    <% end %>
   </ul>
   <%= link_to "Detailed Instructions", instructions_url %>
 </div>
