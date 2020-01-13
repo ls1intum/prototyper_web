@@ -5,8 +5,7 @@ class App < ActiveRecord::Base
   has_many :containers, dependent: :destroy
   has_and_belongs_to_many :admins, :class_name=>"User", :join_table => :Apps_Users
 
-  #VALID_BUNDLE_ID_REGEX = /\A\w+(?:\.\w+)+\z/i
-  VALID_BUNDLE_ID_REGEX = /\Ade\.tum\.in\.www1\.[A-Za-z\-0-9]+(?:\.[A-Za-z\-0-9]+)*\z/i
+  VALID_BUNDLE_ID_REGEX = /\A\w+(?:\.\w+)+\z/i
 
   validates :name,  presence: true, length: { maximum: 50 }
   validates :bundle_id, presence: true, length: { maximum: 100 },

@@ -72,8 +72,6 @@ module ReleasesHelper
   def storeResultsOfIpaRelease(user, release, ipa)
     @build = @release.builds.new
 
-    p ipa
-
     @build.ipa = ipa
     @build.bundle_id = @app.bundle_id
     @build.bundle_version = 1
@@ -234,15 +232,25 @@ module ReleasesHelper
     @release = @app.releases.build(save_params)
     @release.version = version
     if @release.save
-      if storeResultsOfIpaRelease(current_user, @release, ipa)
-        @release.save
-        flash[:success] = "Created release from Xcode project"
-        send_new_release_creation_notification(@app, @release)
-        redirect_to app_url(@app)
+
+      plist_content = readIPAContent(ipa.path())
+      @release.version = "#{plist_content['CFBundleShortVersionString']} (#{plist_content['CFBundleVersion']})"
+
+      if plist_content['CFBundleIdentifier'] == @app.bundle_id
+        if storeResultsOfIpaRelease(current_user, @release, ipa)
+          @release.save
+          flash[:success] = "Created release from Xcode project"
+          send_new_release_creation_notification(@app, @release)
+          redirect_to app_url(@app)
+        else
+          @release.destroy
+          flash[:danger] = "No build artifact found"
+          redirect_to app_releases_new_ipa_url(@app)
+        end
       else
         @release.destroy
-        flash[:danger] = "No build artifact found"
-        redirect_to app_releases_new_beta_url(@app)
+        flash[:danger] = "IPA File has different bundle indentifier"
+        redirect_to app_releases_new_ipa_url(@app)
       end
     else
       @ipa = @release
@@ -450,6 +458,14 @@ module ReleasesHelper
       lastReleaseVersion = 0
       lastReleaseVersion = @app.releases.last.version.to_i unless @app.releases.last.nil?
       return lastReleaseVersion + 1
+    end
+
+    def readIPAContent(file)
+      Zip::File.open(file) do |zip_file|
+        info_plist = zip_file.glob('Payload/*.app/Info.plist').first
+        xml_content = info_plist.get_input_stream.read
+        Plist.parse_xml(xml_content)
+      end
     end
 
 end
