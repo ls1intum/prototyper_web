@@ -1,5 +1,4 @@
 module UsersHelper
-  CROWD_LOGIN_URL = "https://jirabruegge.in.tum.de/rest/usermanagement/1/authentication"
 
   # Returns the Gravatar for the given user.
   def gravatar_for(user)
@@ -39,8 +38,8 @@ module UsersHelper
   private
     def call_api(tum_id, password)
       begin
-        endpoint = "#{CROWD_LOGIN_URL}?username=#{tum_id}"
-        response = RestClient.post endpoint, "<?xml version=\"1.0\" encoding=\"UTF-8\"?><password><value>#{password}</value></password>", {content_type: :xml, accept: :json, Authorization: "Basic $FILLME"}
+        endpoint = "#{Rails.application.secrets.jira_auth_endpoint}?username=#{tum_id}"
+        response = RestClient.post endpoint, "<?xml version=\"1.0\" encoding=\"UTF-8\"?><password><value>#{password}</value></password>", {content_type: :xml, accept: :json, Authorization: "Basic #{Rails.application.secrets.jira_auth_token}"}
         dict = JSON.parse(response)
       rescue => e
         dict = Hash.new
