@@ -3,8 +3,8 @@ class ReleasesController < ApplicationController
   include GroupsHelper
   include SlackHelper
 
-  before_action :logged_in_user, only: [:index, :show, :new_prototype, :new_beta, :create, :edit, :update, :destroy, :status, :available, :icon, :release_notes, :release_to_group, :report]
-  before_action :has_access_to_app, only: [:index, :show, :new_prototype, :new_beta, :create, :edit, :update, :destroy, :status, :release_notes, :release_to_group, :report]
+  before_action :logged_in_user, only: [:index, :show, :new_prototype, :new_ipa, :new_beta, :create, :edit, :update, :destroy, :status, :available, :icon, :release_notes, :release_to_group, :report]
+  before_action :has_access_to_app, only: [:index, :show, :new_prototype, :new_ipa, :new_beta, :create, :edit, :update, :destroy, :status, :release_notes, :release_to_group, :report]
   before_action :has_access_to_release, only: [:show, :edit, :update, :destroy, :container, :status, :web_container, :release_notes, :release_to_group, :report]
   before_action :has_download_access_to_app, only: [:available]
   before_action :has_admin_rights, only: [:destroy]
@@ -22,6 +22,10 @@ class ReleasesController < ApplicationController
     @prototype = @app.releases.build(type: "Prototype")
   end
 
+  def new_ipa
+    @ipa = @app.releases.build(type: "Beta")
+  end
+
   def new_beta
     @beta = @app.releases.build(type: "Beta")
     @branches = @app.branches(current_user)
@@ -29,8 +33,11 @@ class ReleasesController < ApplicationController
   end
 
   def create
+    p params
     if !params[:prototype].nil?
       create_prototype
+    elsif !params[:beta][:ipa].nil?
+      create_ipa
     elsif !params[:beta].nil?
       create_beta
     end
@@ -171,6 +178,10 @@ class ReleasesController < ApplicationController
 
     def beta_params
       params.require(:beta).permit(:version, :description, :type, :bamboo_branch, :build_key)
+    end
+
+    def ipa_params
+      params
     end
 
     def status_text

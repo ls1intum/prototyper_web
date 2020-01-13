@@ -1,0 +1,19 @@
+<% provide(:title, 'New Xcode Build | ' + @app.name) %>
+<h1>New release from Xcode project</h1>
+
+<div class="row">
+  <div class="col-md-6 col-md-offset-3">
+    <%= form_for(@ipa, url: app_releases_path(@app)) do |f| %>
+      <%= render 'shared/error_messages', object: f.object %>
+
+      <%= f.hidden_field :type, :value => Beta.name %>
+
+      <div class="form-group">
+        <%= f.label :ipa, "IPA File" %><br>
+        <%= f.file_field :ipa, accept: 'application/x-ios-app, application/x-itunes-ipa' %>
+      </div>
+
+      <%= f.submit "Create new ipa", class: "btn btn-primary" %>
+    <% end %>
+  </div>
+</div>

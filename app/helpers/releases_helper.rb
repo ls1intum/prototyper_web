@@ -69,6 +69,27 @@ module ReleasesHelper
 
   end
 
+  def storeResultsOfIpaRelease(user, release, ipa)
+    @build = @release.builds.new
+
+    p ipa
+
+    @build.ipa = ipa
+    @build.bundle_id = @app.bundle_id
+    @build.bundle_version = 1
+
+    if @build.save
+      @build.manifest_url = app_release_build_manifest_url(@app, @release, @build)
+      @build.save
+      return true
+    else
+      p @build.errors.full_messages.to_s
+    end
+
+    return false
+
+  end
+
   def getProgressForBuildKey(build_key, user)
     return "Failed" if build_key.nil?
 
@@ -203,6 +224,29 @@ module ReleasesHelper
       @beta = @release
       @branches = @app.branches(current_user)
       render "new_beta"
+    end
+  end
+
+  def create_ipa
+    version = new_release_version
+    ipa = ipa_params[:beta][:ipa]
+    save_params = ipa_params.require(:beta).permit(:version, :description, :type)
+    @release = @app.releases.build(save_params)
+    @release.version = version
+    if @release.save
+      if storeResultsOfIpaRelease(current_user, @release, ipa)
+        @release.save
+        flash[:success] = "Created release from Xcode project"
+        send_new_release_creation_notification(@app, @release)
+        redirect_to app_url(@app)
+      else
+        @release.destroy
+        flash[:danger] = "No build artifact found"
+        redirect_to app_releases_new_beta_url(@app)
+      end
+    else
+      @ipa = @release
+      render "new_ipa"
     end
   end
 
