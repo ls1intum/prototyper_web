@@ -70,3 +70,7 @@ yarn-debug.log*
 # Ignore uploaded files in development
 /storage/*
 !/storage/.keep
+
+# Ignore private keys
+private_key.pem
+private_key_local.pem
