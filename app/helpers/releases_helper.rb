@@ -1,6 +1,6 @@
 module ReleasesHelper
   require 'json'
-  require 'RMagick'
+  require 'rmagick'
   include SlackHelper
 
   BAMBOO_URL = "#{Rails.application.secrets.bamboo_username}:#{Rails.application.secrets.bamboo_password}@#{Rails.application.secrets.bamboo_host}"
