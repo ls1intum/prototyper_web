@@ -6,7 +6,7 @@ module OmniAuth
 end
 
 Rails.application.config.middleware.use OmniAuth::Builder do
-  provider :bamboo, ENV["bamboo_comsumer"],
+  provider :bamboo, Rails.application.secrets.bamboo_consumer,
     OpenSSL::PKey::RSA.new(IO.read(Rails.root.join("private_key.pem"))),
-    :client_options => { :site => ENV["bamboo_url"] }
+    :client_options => { :site => Rails.application.secrets.bamboo_url }
 end

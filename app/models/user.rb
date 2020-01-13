@@ -87,7 +87,7 @@ class User < ActiveRecord::Base
 
   def bamboo_access_token
     if bamboo_token
-      consumer = OAuth::Consumer.new(ENV["bamboo_comsumer"],
+      consumer = OAuth::Consumer.new(Rails.application.secrets.bamboo_consumer,
         OpenSSL::PKey::RSA.new(IO.read(Rails.root.join("private_key.pem"))),
         Rails.application.config.bamboo_options
       )

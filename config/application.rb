@@ -33,7 +33,7 @@ module Prototyper
       :request_token_path => '/plugins/servlet/oauth/request-token',
       :authorize_path     => '/plugins/servlet/oauth/authorize',
       :access_token_path  => '/plugins/servlet/oauth/access-token',
-      :site               => ENV["bamboo_url"]
+      :site               => Rails.application.secrets.bamboo_url
     }
   end
 end

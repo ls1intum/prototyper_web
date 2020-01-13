@@ -2,7 +2,7 @@ module SlackHelper
   require 'uri'
 
   SLACK_API_URL = "https://slack.com/api/chat.postMessage"
-  SLACK_API_TOKEN = "$FILLME"
+  SLACK_API_TOKEN = Rails.application.secrets.slack_api_token
 
   def send_new_release_creation_notification(app, release)
     title = "New release created"
