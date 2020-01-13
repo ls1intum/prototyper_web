@@ -19,9 +19,10 @@
   <%= simple_format(@release.description).html_safe %>
 </p>
 <div class="download-div">
-  <% if browser.platform.ios? %>
+  <% if browser.platform.ios? || browser.platform.android? %>
     <% if !@app.ipad_only || browser.device.ipad? %>
-      <%= link_to "itms-services://?action=download-manifest&url=#{@manifest_url}" do %>
+      <% download_url = browser.platform.ios? ? "itms-services://?action=download-manifest&url=#{@build.manifest_url}" : app_release_build_download_url(@app, @release, @build) %>
+      <%= link_to download_url do %>
         <button type="button" class="btn btn-primary btn-lg center-block" style="width: 100%"
             onclick="return saveDownload('<%= app_release_downloads_path(@app, @release) %>')">
           Download

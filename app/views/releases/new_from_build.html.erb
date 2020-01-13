@@ -1,0 +1,29 @@
+<% provide(:title, 'New Release from Build | ' + @app.name) %>
+<h1>New release from build file</h1>
+
+<div class="row">
+  <div class="col-md-6 col-md-offset-3">
+    <%= form_for(@beta, url: app_releases_path(@app)) do |f| %>
+      <%= render 'shared/error_messages', object: f.object %>
+
+      <%= f.hidden_field :type, :value => Beta.name %>
+
+      <div class="form-group">
+        <%= f.label :name, "Build Key" %>
+        <%= f.text_field :build_key, class: 'form-control' %>
+      </div>
+
+      <div class="form-group">
+        <%= f.label :meta, "Additional meta information" %>
+        <%= f.text_field :meta, class: 'form-control' %>
+      </div>
+
+      <div class="form-group">
+        <%= f.label :build, "IPA/APK File" %><br>
+        <%= f.file_field :build, accept: 'application/x-ios-app, application/x-itunes-ipa' %>
+      </div>
+
+      <%= f.submit "Create new release from build", class: "btn btn-primary" %>
+    <% end %>
+  </div>
+</div>

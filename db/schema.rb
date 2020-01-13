@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161211175150) do
+ActiveRecord::Schema.define(version: 20200113101121) do
 
   create_table "Apps_Users", id: false, force: :cascade do |t|
     t.integer "app_id",  null: false
@@ -153,6 +153,7 @@ ActiveRecord::Schema.define(version: 20161211175150) do
     t.boolean  "hide_statusbar", default: true
     t.string   "build_key"
     t.string   "bamboo_branch"
+    t.string   "meta"
   end
 
   add_index "releases", ["app_id"], name: "index_releases_on_app_id"

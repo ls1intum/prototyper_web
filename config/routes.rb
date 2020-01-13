@@ -43,7 +43,7 @@ Rails.application.routes.draw do
     end
     resources :admins,            only: [:create, :destroy]
     get 'releases/new_prototype' => 'releases#new_prototype'
-    get 'releases/new_ipa' => 'releases#new_ipa'
+    get 'releases/new_from_build' => 'releases#new_from_build'
     get 'releases/new_beta' => 'releases#new_beta'
     get 'releases/available' => 'releases#available'
     post 'remove_release_from_group' => "apps#remove_release_from_group"

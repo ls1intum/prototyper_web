@@ -69,12 +69,25 @@ module ReleasesHelper
 
   end
 
+  def storeResultsOfBuildRelease(user, release, build_file)
+    if File.extname(build_file.path()) == "ipa" 
+      storeResultsOfIpaRelease(user, release, build_file)
+    else
+      storeResultsOfApkRelease(user, release, build_file)
+    end
+  end
+
   def storeResultsOfIpaRelease(user, release, ipa)
+    plist_content = readIPAContent(ipa.path())
+    if plist_content['CFBundleIdentifier'] != @app.bundle_id
+      return false
+    end
+
     @build = @release.builds.new
 
     @build.ipa = ipa
     @build.bundle_id = @app.bundle_id
-    @build.bundle_version = 1
+    @build.bundle_version = plist_content['CFBundleVersion']
 
     if @build.save
       @build.manifest_url = app_release_build_manifest_url(@app, @release, @build)
@@ -85,7 +98,32 @@ module ReleasesHelper
     end
 
     return false
+  end
 
+  def storeResultsOfApkRelease(user, release, apk)
+    bundle_id_sed = 'sed -n "s/.*package: name=\'\([^\']*\).*/\1/p"'
+    bundle_version_sed = 'sed -n "s/.*versionCode=\'\([^\']*\).*/\1/p"'
+
+    bundle_id = `aapt dump badging #{apk.path()} | #{bundle_id_sed}`.strip
+    bundle_version = `aapt dump badging #{apk.path()} | #{bundle_version_sed}`.strip
+    
+    if bundle_id != @app.bundle_id
+      return false
+    end
+
+    @build = @release.builds.new
+
+    @build.ipa = apk
+    @build.bundle_id = @app.bundle_id
+    @build.bundle_version = bundle_version
+
+    if @build.save
+      return true
+    else
+      p @build.errors.full_messages.to_s
+    end
+
+    return false
   end
 
   def getProgressForBuildKey(build_key, user)
@@ -225,36 +263,26 @@ module ReleasesHelper
     end
   end
 
-  def create_ipa
+  def create_from_build
     version = new_release_version
-    ipa = ipa_params[:beta][:ipa]
-    save_params = ipa_params.require(:beta).permit(:version, :description, :type)
+    build_file = ipa_params[:beta][:build]
+    save_params = ipa_params.require(:beta).permit(:version, :description, :type, :build_key)
     @release = @app.releases.build(save_params)
     @release.version = version
     if @release.save
-
-      plist_content = readIPAContent(ipa.path())
-      @release.version = "#{plist_content['CFBundleShortVersionString']} (#{plist_content['CFBundleVersion']})"
-
-      if plist_content['CFBundleIdentifier'] == @app.bundle_id
-        if storeResultsOfIpaRelease(current_user, @release, ipa)
-          @release.save
-          flash[:success] = "Created release from Xcode project"
-          send_new_release_creation_notification(@app, @release)
-          redirect_to app_url(@app)
-        else
-          @release.destroy
-          flash[:danger] = "No build artifact found"
-          redirect_to app_releases_new_ipa_url(@app)
-        end
+      if storeResultsOfBuildRelease(current_user, @release, build_file)
+        @release.save
+        flash[:success] = "Created release from build"
+        send_new_release_creation_notification(@app, @release)
+        redirect_to app_url(@app)
       else
         @release.destroy
-        flash[:danger] = "IPA File has different bundle indentifier"
-        redirect_to app_releases_new_ipa_url(@app)
+        flash[:danger] = "No build artifact found or wrong bundle identifier"
+        redirect_to app_releases_new_from_build_url(@app)
       end
     else
       @ipa = @release
-      render "new_ipa"
+      render "new_from_build"
     end
   end
 
