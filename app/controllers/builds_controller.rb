@@ -1,6 +1,6 @@
 class BuildsController < ApplicationController
   #before_action :logged_in_user, only: [:create]
-  before_action :has_download_access_to_release, only: [:manifest]
+  before_action :has_download_access_to_release, only: [:manifest, :download]
 
   def create
     @app = App.find(params[:app_id])
@@ -22,7 +22,7 @@ class BuildsController < ApplicationController
   def manifest
     @build = @release.builds.find(params[:build_id])
 
-    ipaURL = "https://" + request.host_with_port + @build.ipa.url
+    ipaURL = app_release_build_download_url(@app, @release, @build)
 
     manifestContent = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>
     <!DOCTYPE plist PUBLIC \"-//Apple//DTD PLIST 1.0//EN\" \"http://www.apple.com/DTDs/PropertyList-1.0.dtd\">
@@ -59,6 +59,11 @@ class BuildsController < ApplicationController
     </plist>"
 
     render :text => manifestContent, :content_type => Mime::XML
+  end
+
+  def download
+    @build = @release.builds.find(params[:build_id])
+    send_file @build.ipa.path(), :x_sendfile=>true
   end
 
   private

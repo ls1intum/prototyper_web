@@ -28,7 +28,7 @@
       <% end %>
     <% end %>
     <% unless beta.builds.first.nil? %>
-      <%= link_to beta.builds.first.ipa_url, target: "_blank" do %>
+      <%= link_to app_release_build_download_url(@app, beta, beta.builds.first), target: "_blank" do %>
         <span class="glyphicon glyphicon-download-alt action-button"></span>
       <% end %>
     <% end %>

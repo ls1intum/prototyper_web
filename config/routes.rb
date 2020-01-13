@@ -53,6 +53,7 @@ Rails.application.routes.draw do
     resources :releases,           only: [:create, :destroy, :show] do
       resources :builds,          only: [:create] do
         get 'manifest' => 'builds#manifest'
+        get 'download' => 'builds#download'
       end
       resources :feedbacks,       only: [:create, :new, :index, :destroy] do
         post 'toggle' => "feedbacks#toggle"
