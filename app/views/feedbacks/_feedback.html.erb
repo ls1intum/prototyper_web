@@ -38,7 +38,7 @@
       description = "#{feedback.text}%0A%0A#{app_release_feedbacks_url(@app, @release)}%23#{feedback.id}"
     %>
     <%= link_to "https://jirabruegge.in.tum.de/secure/CreateIssueDetails!init.jspa?pid=#{@app.jira_project_id}&issuetype=3&summary=#{summary}&reporter=#{reporter}&description=#{description}", target: "_blank" do %>
-      <%= image_tag("/assets/jira.png", alt: "JIRA", class: "jira-img") %>
+      <%= image_tag("jira.png", alt: "JIRA", class: "jira-img") %>
     <% end %>
   </div>
 </div>

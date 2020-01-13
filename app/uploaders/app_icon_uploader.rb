@@ -19,6 +19,6 @@ class AppIconUploader < CarrierWave::Uploader::Base
   end
 
   def default_url(*args)
-    "/assets/default_icon.png"
+    "default_icon.png"
   end
 end
