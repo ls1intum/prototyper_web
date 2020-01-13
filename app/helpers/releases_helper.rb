@@ -3,11 +3,11 @@ module ReleasesHelper
   require 'rmagick'
   include SlackHelper
 
-  BAMBOO_URL = "#{Rails.application.secrets.bamboo_username}:#{Rails.application.secrets.bamboo_password}@#{Rails.application.secrets.bamboo_host}"
+  BAMBOO_AUTHENTICATED_HOST = "#{Rails.application.secrets.bamboo_username}:#{Rails.application.secrets.bamboo_password}@#{Rails.application.secrets.bamboo_host}"
 
-  BAMBOO_API_TRIGGER_URL = "https://#{BAMBOO_AUTH}/rest/api/latest/queue/BAKR-BAKR?stage&executeAllStages"
-  BAMBOO_API_STATUS_URL = "https://#{BAMBOO_AUTH}/rest/api/latest/result/status/"
-  BAMBOO_API_RESULT_URL = "https://#{BAMBOO_AUTH}/rest/api/latest/result/"
+  BAMBOO_API_TRIGGER_URL = "https://#{BAMBOO_AUTHENTICATED_HOST}/rest/api/latest/queue/BAKR-BAKR?stage&executeAllStages"
+  BAMBOO_API_STATUS_URL = "https://#{BAMBOO_AUTHENTICATED_HOST}/rest/api/latest/result/status/"
+  BAMBOO_API_RESULT_URL = "https://#{BAMBOO_AUTHENTICATED_HOST}/rest/api/latest/result/"
 
   def sendReleaseToBamboo(release)
     begin
