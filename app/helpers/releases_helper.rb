@@ -1,6 +1,7 @@
 module ReleasesHelper
   require 'json'
   require 'rmagick'
+  require 'zip'
   include SlackHelper
 
   BAMBOO_AUTHENTICATED_HOST = "#{Rails.application.secrets.bamboo_username}:#{Rails.application.secrets.bamboo_password}@#{Rails.application.secrets.bamboo_host}"
@@ -70,7 +71,7 @@ module ReleasesHelper
   end
 
   def storeResultsOfBuildRelease(user, release, build_file)
-    if File.extname(build_file.path()) == "ipa" 
+    if File.extname(build_file.path()) == ".ipa" 
       storeResultsOfIpaRelease(user, release, build_file)
     else
       storeResultsOfApkRelease(user, release, build_file)
