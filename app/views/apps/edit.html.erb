@@ -40,6 +40,11 @@
       </div>
 
       <div class="form-group">
+        <%= f.label :upload_key, "API Upload Key" %><br>
+        <%= f.text_field :upload_key, class: 'form-control'%>
+      </div>
+
+      <div class="form-group">
         <%= f.label "Limitations:" %></br>
         <%= f.label :ipad_only, class: "checkbox inline" do %>
           <%= f.check_box :ipad_only %>

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20200113101121) do
+ActiveRecord::Schema.define(version: 20200114094049) do
 
   create_table "Apps_Users", id: false, force: :cascade do |t|
     t.integer "app_id",  null: false
@@ -34,6 +34,7 @@ ActiveRecord::Schema.define(version: 20200113101121) do
     t.string   "slack_channel"
     t.string   "jira_project_id"
     t.boolean  "ipad_only"
+    t.string   "upload_key"
   end
 
   add_index "apps", ["user_id", "created_at"], name: "index_apps_on_user_id_and_created_at"

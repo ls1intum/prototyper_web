@@ -273,17 +273,29 @@ module ReleasesHelper
     if @release.save
       if storeResultsOfBuildRelease(current_user, @release, build_file)
         @release.save
-        flash[:success] = "Created release from build"
-        send_new_release_creation_notification(@app, @release)
-        redirect_to app_url(@app)
+        if @is_api_call 
+          render :text => "Release added"
+        else
+          flash[:success] = "Created release from build"
+          send_new_release_creation_notification(@app, @release)
+          redirect_to app_url(@app)  
+        end
       else
-        @release.destroy
-        flash[:danger] = "No build artifact found or wrong bundle identifier"
-        redirect_to app_releases_new_from_build_url(@app)
+        if @is_api_call 
+          render :text => "No build artifact found or wrong bundle identifier", :status => 400
+        else
+          @release.destroy
+          flash[:danger] = "No build artifact found or wrong bundle identifier"
+          redirect_to app_releases_new_from_build_url(@app)
+        end
       end
     else
-      @ipa = @release
-      render "new_from_build"
+      if @is_api_call 
+        render :text => @release.errors.full_messages.to_s, :status => 400
+      else
+        @ipa = @release
+        render "new_from_build"
+      end
     end
   end
 
