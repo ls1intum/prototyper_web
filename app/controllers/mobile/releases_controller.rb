@@ -4,7 +4,7 @@ class Mobile::ReleasesController < ApplicationController
   before_action :has_access
 
   def show
-    @manifest_url = params[:main_release] == "true" ? @release.builds.first.manifest_url : @release.builds.last.manifest_url
+    @build = params[:main_release] == "true" ? @release.builds.first : @release.builds.last
   end
 
   private

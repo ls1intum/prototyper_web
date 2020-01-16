@@ -26,6 +26,8 @@ gem 'rmagick',		  '2.15.0'
 gem 'sidekiq'
 gem 'redis-namespace'
 gem 'sqlite3',     '1.3.9'
+gem 'rubyzip'
+gem 'plist'
 
 group :development, :test do
   gem 'byebug',      '3.4.0'

@@ -5,8 +5,7 @@
     <% end %>
   </td>
   <td class="hidden-xs hidden-sm col-md-4">
-    <% build_id = (beta.builds.first.nil? || beta.builds.first.bundle_version.nil? ? beta.bamboo_branch : beta.builds.first.bundle_version) %>
-    <%= link_to build_id, "https://bamboobruegge.in.tum.de/browse/#{beta.build_key}", target: "_blank" %>
+    <%= beta.build_key %>
   </td>
   <td class="hidden-xs hidden-sm">
     <%= beta.created_at.strftime("%d.%m.%Y %H:%M (Munich Time)") %>

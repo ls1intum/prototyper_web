@@ -124,7 +124,7 @@ class AppsController < ApplicationController
   private
 
     def app_params
-      params.require(:app).permit(:name, :bundle_id, :icon, :bamboo_project, :bamboo_plan, :description, :icon_cache, :slack_channel, :jira_project_id, :ipad_only)
+      params.require(:app).permit(:name, :bundle_id, :icon, :bamboo_project, :bamboo_plan, :description, :icon_cache, :slack_channel, :jira_project_id, :upload_key, :ipad_only)
     end
 
 end

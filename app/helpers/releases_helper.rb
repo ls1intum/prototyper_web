@@ -1,6 +1,7 @@
 module ReleasesHelper
   require 'json'
   require 'rmagick'
+  require 'zip'
   include SlackHelper
 
   BAMBOO_AUTHENTICATED_HOST = "#{Rails.application.secrets.bamboo_username}:#{Rails.application.secrets.bamboo_password}@#{Rails.application.secrets.bamboo_host}"
@@ -67,6 +68,63 @@ module ReleasesHelper
 
     return false
 
+  end
+
+  def storeResultsOfBuildRelease(user, release, build_file)
+    if File.extname(build_file.path()) == ".ipa" 
+      storeResultsOfIpaRelease(user, release, build_file)
+    else
+      storeResultsOfApkRelease(user, release, build_file)
+    end
+  end
+
+  def storeResultsOfIpaRelease(user, release, ipa)
+    plist_content = readIPAContent(ipa.path())
+    if plist_content['CFBundleIdentifier'] != @app.bundle_id
+      return false
+    end
+
+    @build = @release.builds.new
+
+    @build.ipa = ipa
+    @build.bundle_id = @app.bundle_id
+    @build.bundle_version = plist_content['CFBundleVersion']
+
+    if @build.save
+      @build.manifest_url = app_release_build_manifest_url(@app, @release, @build)
+      @build.save
+      return true
+    else
+      p @build.errors.full_messages.to_s
+    end
+
+    return false
+  end
+
+  def storeResultsOfApkRelease(user, release, apk)
+    bundle_id_sed = 'sed -n "s/.*package: name=\'\([^\']*\).*/\1/p"'
+    bundle_version_sed = 'sed -n "s/.*versionCode=\'\([^\']*\).*/\1/p"'
+
+    bundle_id = `aapt dump badging #{apk.path()} | #{bundle_id_sed}`.strip
+    bundle_version = `aapt dump badging #{apk.path()} | #{bundle_version_sed}`.strip
+    
+    if bundle_id != @app.bundle_id
+      return false
+    end
+
+    @build = @release.builds.new
+
+    @build.ipa = apk
+    @build.bundle_id = @app.bundle_id
+    @build.bundle_version = bundle_version
+
+    if @build.save
+      return true
+    else
+      p @build.errors.full_messages.to_s
+    end
+
+    return false
   end
 
   def getProgressForBuildKey(build_key, user)
@@ -203,6 +261,41 @@ module ReleasesHelper
       @beta = @release
       @branches = @app.branches(current_user)
       render "new_beta"
+    end
+  end
+
+  def create_from_build
+    version = new_release_version
+    build_file = ipa_params[:beta][:build]
+    save_params = ipa_params.require(:beta).permit(:version, :description, :type, :build_key)
+    @release = @app.releases.build(save_params)
+    @release.version = version
+    if @release.save
+      if storeResultsOfBuildRelease(current_user, @release, build_file)
+        @release.save
+        if @is_api_call 
+          render :text => "Release added"
+        else
+          flash[:success] = "Created release from build"
+          send_new_release_creation_notification(@app, @release)
+          redirect_to app_url(@app)  
+        end
+      else
+        if @is_api_call 
+          render :text => "No build artifact found or wrong bundle identifier", :status => 400
+        else
+          @release.destroy
+          flash[:danger] = "No build artifact found or wrong bundle identifier"
+          redirect_to app_releases_new_from_build_url(@app)
+        end
+      end
+    else
+      if @is_api_call 
+        render :text => @release.errors.full_messages.to_s, :status => 400
+      else
+        @ipa = @release
+        render "new_from_build"
+      end
     end
   end
 
@@ -406,6 +499,14 @@ module ReleasesHelper
       lastReleaseVersion = 0
       lastReleaseVersion = @app.releases.last.version.to_i unless @app.releases.last.nil?
       return lastReleaseVersion + 1
+    end
+
+    def readIPAContent(file)
+      Zip::File.open(file) do |zip_file|
+        info_plist = zip_file.glob('Payload/*.app/Info.plist').first
+        xml_content = info_plist.get_input_stream.read
+        Plist.parse_xml(xml_content)
+      end
     end
 
 end

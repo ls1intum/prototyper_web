@@ -3,8 +3,9 @@ class ReleasesController < ApplicationController
   include GroupsHelper
   include SlackHelper
 
-  before_action :logged_in_user, only: [:index, :show, :new_prototype, :new_beta, :create, :edit, :update, :destroy, :status, :available, :icon, :release_notes, :release_to_group, :report]
-  before_action :has_access_to_app, only: [:index, :show, :new_prototype, :new_beta, :create, :edit, :update, :destroy, :status, :release_notes, :release_to_group, :report]
+  before_action :logged_in_user, only: [:index, :show, :new_prototype, :new_from_build, :new_beta, :edit, :update, :destroy, :status, :available, :icon, :release_notes, :release_to_group, :report]
+  before_action :logged_in_user_or_upload_key, only: [:create]
+  before_action :has_access_to_app, only: [:index, :show, :new_prototype, :new_from_build, :new_beta, :create, :edit, :update, :destroy, :status, :release_notes, :release_to_group, :report]
   before_action :has_access_to_release, only: [:show, :edit, :update, :destroy, :container, :status, :web_container, :release_notes, :release_to_group, :report]
   before_action :has_download_access_to_app, only: [:available]
   before_action :has_admin_rights, only: [:destroy]
@@ -22,6 +23,10 @@ class ReleasesController < ApplicationController
     @prototype = @app.releases.build(type: "Prototype")
   end
 
+  def new_from_build
+    @beta = @app.releases.build(type: "Beta")
+  end
+
   def new_beta
     @beta = @app.releases.build(type: "Beta")
     @branches = @app.branches(current_user)
@@ -29,8 +34,11 @@ class ReleasesController < ApplicationController
   end
 
   def create
+    @is_api_call = params[:upload_key].present?
     if !params[:prototype].nil?
       create_prototype
+    elsif !params[:beta][:build].nil?
+      create_from_build
     elsif !params[:beta].nil?
       create_beta
     end
@@ -171,6 +179,10 @@ class ReleasesController < ApplicationController
 
     def beta_params
       params.require(:beta).permit(:version, :description, :type, :bamboo_branch, :build_key)
+    end
+
+    def ipa_params
+      params
     end
 
     def status_text

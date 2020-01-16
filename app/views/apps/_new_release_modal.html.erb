@@ -29,7 +29,7 @@
                           <%= image_tag(app_release_icon_url(@app, release), alt: release.version, class: "icon") %>
                         </td>
                         <td>
-                          <%= release.type == "Prototype" ? release.url : (release.builds.first.nil? || release.builds.first.bundle_version.nil? ? release.bamboo_branch : release.builds.first.bundle_version) %>
+                          <%= release.type == "Prototype" ? release.url : (release.bamboo_branch || release.build_key || release.builds.first.bundle_version) %>
                         </td>
                         <td>
                           <%= release.created_at.strftime("%d.%m.%Y %H:%M (Munich Time)") %>
