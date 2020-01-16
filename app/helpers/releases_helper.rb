@@ -1,6 +1,7 @@
 module ReleasesHelper
   require 'json'
   require 'rmagick'
+  require 'rubygems'
   require 'zip'
   include SlackHelper
 
