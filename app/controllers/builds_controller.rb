@@ -58,7 +58,7 @@ class BuildsController < ApplicationController
     </dict>
     </plist>"
 
-    render :plain => manifestContent, :content_type => Mime::XML
+    render :plain => manifestContent, :content_type => "text/xml"
   end
 
   def download
