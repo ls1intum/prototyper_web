@@ -1,4 +1,4 @@
-class Release < ActiveRecord::Base
+class Release < ApplicationRecord
   belongs_to :app
   has_many :builds, dependent: :destroy
   has_many :feedbacks, dependent: :destroy

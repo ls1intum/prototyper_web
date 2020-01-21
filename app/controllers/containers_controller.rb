@@ -29,12 +29,12 @@ class ContainersController < ApplicationController
   def status
     @container = Container.find_by(id: params[:container_id])
     if @container.nil?
-      render :text => "Couldn't download marvel mockup"
+      render :plain => "Couldn't download marvel mockup"
     else
       if @container.container_path.present?
-        render :text => "<a href='#{app_container_download_url(@app, @container)}' target='_blank'>Download</a>"
+        render :plain => "<a href='#{app_container_download_url(@app, @container)}' target='_blank'>Download</a>"
       else
-        render :text => "Downloading..."
+        render :plain => "Downloading..."
       end
     end
   end

@@ -1,4 +1,4 @@
-class User < ActiveRecord::Base
+class User < ApplicationRecord
   include UsersHelper
 
   attr_accessor :remember_token, :activation_token, :reset_token

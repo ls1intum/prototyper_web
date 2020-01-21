@@ -1,4 +1,4 @@
-class ReleaseLog < ActiveRecord::Base
+class ReleaseLog < ApplicationRecord
   belongs_to :release
   belongs_to :group
 

@@ -49,7 +49,7 @@ class FeedbacksController < ApplicationController
   def toggle
     @feedback = @release.feedbacks.find(params[:feedback_id])
     @feedback.update_attributes(:completed => !@feedback.completed)
-    render status: 200, text: "#{@feedback.completed}"
+    render status: 200, plain: "#{@feedback.completed}"
   end
 
   private

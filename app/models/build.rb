@@ -1,4 +1,4 @@
-class Build < ActiveRecord::Base
+class Build < ApplicationRecord
   belongs_to :release
 
   validates :ipa,  presence: true

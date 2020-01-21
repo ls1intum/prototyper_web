@@ -50,7 +50,7 @@
     <%= form_for(:group_user, url: app_group_group_users_path(@app, @group)) do |f| %>
     <div class="input-group">
         <%= select_tag "user_id", options_for_select(User.all.collect {|user| [ "#{user.name} (#{user.tum_id || user.email})", user.id ] }),
-              { include_blank: "No user selected", class: "selectpicker", 'data-live-search': "true", 'data-width': "100%" } %><br>
+              { include_blank: "No user selected", class: "selectpicker left-input-in-group", 'data-live-search': "true", 'data-width': "100%" } %><br>
         <span class="input-group-btn">
           <%= f.submit "Invite existing user", class: "btn btn-primary", style: "width: 150px;" do %>
             <span class="glyphicon glyphicon-plus"></span>

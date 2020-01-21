@@ -97,14 +97,14 @@ class ReleasesController < ApplicationController
     @release = @app.releases.find_by(id: release_id)
 
     if @app.nil? || @release.nil?
-      render status: :forbidden, text: "Not authorized (release)"
+      render status: :forbidden, plain: "Not authorized (release)"
     else
       create_annotated_icon @release
     end
   end
 
   def release_notes
-    render :text => @release.description
+    render :plain => @release.description
   end
 
   def release_to_group
@@ -117,7 +117,7 @@ class ReleasesController < ApplicationController
     @release.save
 
     if @release.builds.blank?
-      render :text => "The current release is still processing. Try again later.", :status => 400
+      render :plain => "The current release is still processing. Try again later.", :status => 400
     else
       if is_main_release == "true"
         checkForChanges group, @release, true if send_mails == "true"
@@ -125,17 +125,17 @@ class ReleasesController < ApplicationController
         group.save
         send_new_release_submission_notification(@app, @release, group, current_user)
         ReleaseLog.create(group: group, release: @release, is_main_release: is_main_release, changelog: changelog).save
-        render text: "", :status => 200
+        render plain: "", :status => 200
       else
         if @release.type == "Beta"
-          render :text => "Only mockups can be set as additional releases.", :status => 400
+          render :plain => "Only mockups can be set as additional releases.", :status => 400
         else
           checkForChanges group, @release, false if send_mails == "true"
           group.second_release = @release
           group.save
           send_new_release_submission_notification(@app, @release, group, current_user)
           ReleaseLog.create(group: group, release: @release, is_main_release: is_main_release, changelog: changelog).save
-          render text: "", :status => 200
+          render plain: "", :status => 200
         end
       end
     end
@@ -168,7 +168,7 @@ class ReleasesController < ApplicationController
     feedback.username = username
     feedback.save
 
-    render :text => "Share successful"
+    render :plain => "Share successful"
   end
 
   private

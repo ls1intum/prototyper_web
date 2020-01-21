@@ -13,9 +13,9 @@ class BuildsController < ApplicationController
     if @build.save
       @build.manifest_url = app_release_build_manifest_url(@app, @release, @build)
       @build.save
-      render :text => "Build added"
+      render :plain => "Build added"
     else
-      render :text => @build.errors.full_messages.to_s, :status => 400
+      render :plain => @build.errors.full_messages.to_s, :status => 400
     end
   end
 
@@ -58,7 +58,7 @@ class BuildsController < ApplicationController
     </dict>
     </plist>"
 
-    render :text => manifestContent, :content_type => Mime::XML
+    render :plain => manifestContent, :content_type => "text/xml"
   end
 
   def download

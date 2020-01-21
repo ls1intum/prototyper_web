@@ -1,4 +1,4 @@
-class App < ActiveRecord::Base
+class App < ApplicationRecord
   belongs_to :user
   has_many :groups, dependent: :destroy
   has_many :releases, dependent: :destroy

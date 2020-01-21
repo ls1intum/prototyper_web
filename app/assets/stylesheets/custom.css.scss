@@ -203,6 +203,11 @@ form {
   margin-bottom: 0px !important;
 }
 
+.left-input-in-group > button.btn {
+  border-top-left-radius: 4px  !important;
+  border-bottom-left-radius: 4px  !important;
+}
+
 #manage_releases {
   .icon {
     width: 80px;

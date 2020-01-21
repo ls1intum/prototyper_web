@@ -6,7 +6,7 @@ class FeedbackTest < ActiveSupport::TestCase
     @user = users(:michael)
     @release = releases(:one)
 
-    @feedback = @release.feedbacks.build(user: @user, title:"Test title", text: "Lorem ipsom bla")
+    @feedback = @release.feedbacks.build(user: @user, title:"Test title", plain: "Lorem ipsom bla")
   end
 
   test "should be valid" do
