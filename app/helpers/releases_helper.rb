@@ -346,7 +346,7 @@ module ReleasesHelper
     unless File.exist?(icon_path)
       img = nil
       if release.app.icon.file.nil?
-          img = Magick::Image.read(Rails.root.join(asset_path('images/default_icon.png')))[0]
+          img = Magick::Image.read("#{Rails.root}/app/assets/images/default_icon.png")[0]
       else
           img = Magick::Image.read(release.app.icon.file.file)[0]
       end
