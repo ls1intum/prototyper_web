@@ -1,0 +1,11 @@
+version: '3'
+services:
+  web:
+    build: 
+      context: .
+      args:
+        SECRET_KEY_BASE: ${SECRET_KEY_BASE}
+    env_file:
+      - ./.env
+    ports:
+      - "80:80"

@@ -1,7 +1,7 @@
 FROM phusion/passenger-ruby24
 
-ARG secret_token
-ENV SECRET_KEY_BASE=$secret_token
+ARG SECRET_KEY_BASE
+ENV SECRET_KEY_BASE=$SECRET_KEY_BASE
 
 # Set correct environment variables.
 ENV HOME /root
@@ -30,3 +30,4 @@ RUN apt-get update && \
 
 RUN RAILS_ENV=production bundle exec rake assets:precompile
 
+EXPOSE 80
