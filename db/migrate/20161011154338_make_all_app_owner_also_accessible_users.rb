@@ -1,4 +1,4 @@
-class MakeAllAppOwnerAlsoAccessibleUsers < ActiveRecord::Migration
+class MakeAllAppOwnerAlsoAccessibleUsers < ActiveRecord::Migration[4.2]
   def up
     App.find_each do |app|
       user = app.user

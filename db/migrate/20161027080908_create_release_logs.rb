@@ -1,4 +1,4 @@
-class CreateReleaseLogs < ActiveRecord::Migration
+class CreateReleaseLogs < ActiveRecord::Migration[4.2]
   def change
     create_table :release_logs do |t|
       t.references :group, index: true, foreign_key: true
