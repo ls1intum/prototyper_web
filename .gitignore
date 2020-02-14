@@ -22,7 +22,6 @@ config/initializers/secret_token.rb
 config/master.key
 
 config/environments/development.rb
-config/environments/production.rb
 
 config/secrets.yml
 
