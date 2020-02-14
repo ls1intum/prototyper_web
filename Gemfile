@@ -30,7 +30,6 @@ gem 'sqlite3', '~> 1.4.2'
 gem 'rubyzip', '~> 2.0.0', require: 'zip'
 gem 'plist', '~> 3.5.0'
 gem 'bootsnap', '~> 1.4.5', require: false
-gem 'tzinfo-data'
 
 group :development, :test do
   gem 'byebug', '~> 11.0.1'

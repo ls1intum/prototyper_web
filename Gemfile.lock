@@ -405,8 +405,6 @@ GEM
     turbolinks-source (5.2.0)
     tzinfo (1.2.6)
       thread_safe (~> 0.1)
-    tzinfo-data (1.2019.3)
-      tzinfo (>= 1.0.0)
     uglifier (4.2.0)
       execjs (>= 0.3.0, < 3)
     unf (0.1.4)
@@ -462,7 +460,6 @@ DEPENDENCIES
   spring (~> 2.1.0)
   sqlite3 (~> 1.4.2)
   turbolinks (~> 5.2.1)
-  tzinfo-data
   uglifier (~> 4.2.0)
   web-console (~> 3.7.0)
 
