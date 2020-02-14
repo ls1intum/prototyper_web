@@ -1,5 +1,4 @@
-# Compile the assets
-bundle exec rake assets:precompile
+RAILS_ENV=production bundle exec rake assets:precompile
+RAILS_ENV=production bundle exec rake db:migrate
 
-# Start the server
-bundle exec rails server
+/sbin/my_init

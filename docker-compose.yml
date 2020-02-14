@@ -5,7 +5,13 @@ services:
       context: .
       args:
         SECRET_KEY_BASE: ${SECRET_KEY_BASE}
+    restart: always
     env_file:
       - ./.env
     ports:
       - "80:80"
+    volumes:
+      - ./db:/home/app/prototyper_web/db
+      - ./public:/home/app/prototyper_web/public
+      - ./log:/home/app/prototyper_web/log
+    command: sh /home/app/prototyper_web/entrypoint.sh

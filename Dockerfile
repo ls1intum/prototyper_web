@@ -27,7 +27,3 @@ RUN apt-get update && \
     apt-get install -y imagemagick libmagickcore-dev libmagickwand-dev && \
     bundle install --deployment --without development test && \
     apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
-
-RUN RAILS_ENV=production bundle exec rake assets:precompile
-
-EXPOSE 80
