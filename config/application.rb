@@ -11,7 +11,8 @@ module Prototyper
     config.autoload_paths += %W(#{config.root}/app/models/releases)
     # Initialize configuration defaults for originally generated Rails version.
     config.load_defaults 5.0
-
+    config.generators.javascript_engine = :js
+    
     config.bamboo_options = {
       :signature_method   => 'RSA-SHA1',
       :request_token_path => '/plugins/servlet/oauth/request-token',
