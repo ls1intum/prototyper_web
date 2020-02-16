@@ -13,5 +13,5 @@ services:
     volumes:
       - ./db:/home/app/prototyper_web/db
       - ./public:/home/app/prototyper_web/public
-      - ./log:/home/app/prototyper_web/log
+      - ./private:/home/app/prototyper_web/private
     command: sh /home/app/prototyper_web/entrypoint.sh
