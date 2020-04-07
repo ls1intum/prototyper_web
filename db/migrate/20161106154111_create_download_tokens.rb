@@ -1,4 +1,4 @@
-class CreateDownloadTokens < ActiveRecord::Migration
+class CreateDownloadTokens < ActiveRecord::Migration[4.2]
   def change
     create_table :download_tokens do |t|
       t.references :release, index: true, foreign_key: true

@@ -97,7 +97,7 @@ class AppsController < ApplicationController
     end
 
     if app.nil? || release.nil?
-      render text: "{error: Resource does not exist}", :status => 404
+      render plain: "{error: Resource does not exist}", :status => 404
     else
       respond_to do |format|
         format.html { render json: {app_id: app.id, release_id: release.id} }
@@ -118,13 +118,13 @@ class AppsController < ApplicationController
 
     group.save
     ReleaseLog.create(group: group, release: nil, is_main_release: is_main_release, changelog: nil).save
-    render text: "", :status => 200
+    render plain: "", :status => 200
   end
 
   private
 
     def app_params
-      params.require(:app).permit(:name, :bundle_id, :icon, :bamboo_project, :bamboo_plan, :description, :icon_cache, :slack_channel, :jira_project_id, :ipad_only)
+      params.require(:app).permit(:name, :bundle_id, :icon, :bamboo_project, :bamboo_plan, :description, :icon_cache, :slack_channel, :jira_project_id, :upload_key, :ipad_only)
     end
 
 end

@@ -14,9 +14,9 @@ class DownloadsController < ApplicationController
     @download.user = current_user
     @download.release_id = params[:release_id]
     if @download.save
-      render :text => "Successfully saved download"
+      render :plain => "Successfully saved download"
     else
-      render :text => @download.errors.full_messages.to_s, :status => 400
+      render :plain => @download.errors.full_messages.to_s, :status => 400
     end
   end
 

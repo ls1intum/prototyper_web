@@ -10,6 +10,6 @@ You can now start testing <%= @group.app.name %> app and we will notify you if a
 <% end %>
 
 <% unless @user.tum_id.blank? %>
-  Please log in with your TUM-Identifier (<%= @user.tum_id %>) <%= link_to "here", mobile_app_url(@group.app), target: "_blank" %>
+  Please log in with your TUM-Identifier (<%= @user.tum_id %>) <%= link_to "here", mobile_app_url(@group.app), target: "_blank", only_path: true %>
 <% end %>
 </p>

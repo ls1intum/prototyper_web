@@ -13,6 +13,10 @@ class ApplicationController < ActionController::Base
     end
   end
 
+  def logged_in_user_or_upload_key
+    render status: :forbidden, plain: "Not authorized" unless logged_in? || params[:upload_key].present?
+  end
+
   def log_in_with_token
     unless logged_in?
       app = App.find(params[:app_id])
@@ -29,15 +33,24 @@ class ApplicationController < ActionController::Base
 
   def has_access_to_app
     app_id = params[:app_id].nil? ? params[:id] : params[:app_id]
-    @app = current_user.administratable_apps.find_by(id: app_id)
-    @app = App.find_by(id: app_id) if current_user.admin
-    render status: :forbidden, text: "Not authorized (app)" if @app.nil?
+
+    if current_user.present?
+      @app = current_user.administratable_apps.find_by(id: app_id) 
+      @app = App.find_by(id: app_id) if current_user.admin  
+    end
+
+    if params[:upload_key].present?
+      app_over_id = App.find_by(id: app_id)
+      @app = app_over_id if app_over_id.upload_key == params[:upload_key]
+    end
+
+    render status: :forbidden, plain: "Not authorized (app)" if @app.nil?
   end
 
   def has_access_to_group
     group_id = params[:group_id].nil? ? params[:id] : params[:group_id]
     @group = @app.groups.find_by(id: group_id)
-    render status: :forbidden, text: "Not authorized (group)" if @group.nil?
+    render status: :forbidden, plain: "Not authorized (group)" if @group.nil?
   end
 
   def has_access_to_release
@@ -46,7 +59,7 @@ class ApplicationController < ActionController::Base
 
     release_id = params[:release_id].nil? ? params[:id] : params[:release_id]
     @release = @app.releases.find_by(id: release_id)
-    render status: :forbidden, text: "Not authorized (release)" if @release.nil?
+    render status: :forbidden, plain: "Not authorized (release)" if @release.nil?
   end
 
   def has_download_access_to_release
@@ -58,12 +71,12 @@ class ApplicationController < ActionController::Base
   end
 
   def has_admin_rights
-    render status: :forbidden, text: "Not authorized" unless current_user.admin
+    render status: :forbidden, plain: "Not authorized" unless current_user.admin
   end
 
   def has_write_permissions
     if current_user.write_permissions == false && current_user.admin == false
-      render status: :forbidden, text: "Not authorized (app)" if @app.nil?
+      render status: :forbidden, plain: "Not authorized (app)" if @app.nil?
     end
   end
 

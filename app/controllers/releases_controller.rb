@@ -3,8 +3,9 @@ class ReleasesController < ApplicationController
   include GroupsHelper
   include SlackHelper
 
-  before_action :logged_in_user, only: [:index, :show, :new_prototype, :new_beta, :create, :edit, :update, :destroy, :status, :available, :icon, :release_notes, :release_to_group, :report]
-  before_action :has_access_to_app, only: [:index, :show, :new_prototype, :new_beta, :create, :edit, :update, :destroy, :status, :release_notes, :release_to_group, :report]
+  before_action :logged_in_user, only: [:index, :show, :new_prototype, :new_from_build, :new_beta, :edit, :update, :destroy, :status, :available, :icon, :release_notes, :release_to_group, :report]
+  before_action :logged_in_user_or_upload_key, only: [:create]
+  before_action :has_access_to_app, only: [:index, :show, :new_prototype, :new_from_build, :new_beta, :create, :edit, :update, :destroy, :status, :release_notes, :release_to_group, :report]
   before_action :has_access_to_release, only: [:show, :edit, :update, :destroy, :container, :status, :web_container, :release_notes, :release_to_group, :report]
   before_action :has_download_access_to_app, only: [:available]
   before_action :has_admin_rights, only: [:destroy]
@@ -22,6 +23,10 @@ class ReleasesController < ApplicationController
     @prototype = @app.releases.build(type: "Prototype")
   end
 
+  def new_from_build
+    @beta = @app.releases.build(type: "Beta")
+  end
+
   def new_beta
     @beta = @app.releases.build(type: "Beta")
     @branches = @app.branches(current_user)
@@ -29,8 +34,11 @@ class ReleasesController < ApplicationController
   end
 
   def create
+    @is_api_call = params[:upload_key].present?
     if !params[:prototype].nil?
       create_prototype
+    elsif !params[:beta][:build].nil?
+      create_from_build
     elsif !params[:beta].nil?
       create_beta
     end
@@ -89,14 +97,14 @@ class ReleasesController < ApplicationController
     @release = @app.releases.find_by(id: release_id)
 
     if @app.nil? || @release.nil?
-      render status: :forbidden, text: "Not authorized (release)"
+      render status: :forbidden, plain: "Not authorized (release)"
     else
       create_annotated_icon @release
     end
   end
 
   def release_notes
-    render :text => @release.description
+    render :plain => @release.description
   end
 
   def release_to_group
@@ -109,7 +117,7 @@ class ReleasesController < ApplicationController
     @release.save
 
     if @release.builds.blank?
-      render :text => "The current release is still processing. Try again later.", :status => 400
+      render :plain => "The current release is still processing. Try again later.", :status => 400
     else
       if is_main_release == "true"
         checkForChanges group, @release, true if send_mails == "true"
@@ -117,17 +125,17 @@ class ReleasesController < ApplicationController
         group.save
         send_new_release_submission_notification(@app, @release, group, current_user)
         ReleaseLog.create(group: group, release: @release, is_main_release: is_main_release, changelog: changelog).save
-        render text: "", :status => 200
+        render plain: "", :status => 200
       else
         if @release.type == "Beta"
-          render :text => "Only mockups can be set as additional releases.", :status => 400
+          render :plain => "Only mockups can be set as additional releases.", :status => 400
         else
           checkForChanges group, @release, false if send_mails == "true"
           group.second_release = @release
           group.save
           send_new_release_submission_notification(@app, @release, group, current_user)
           ReleaseLog.create(group: group, release: @release, is_main_release: is_main_release, changelog: changelog).save
-          render text: "", :status => 200
+          render plain: "", :status => 200
         end
       end
     end
@@ -160,7 +168,7 @@ class ReleasesController < ApplicationController
     feedback.username = username
     feedback.save
 
-    render :text => "Share successful"
+    render :plain => "Share successful"
   end
 
   private
@@ -171,6 +179,10 @@ class ReleasesController < ApplicationController
 
     def beta_params
       params.require(:beta).permit(:version, :description, :type, :bamboo_branch, :build_key)
+    end
+
+    def ipa_params
+      params
     end
 
     def status_text

@@ -23,7 +23,7 @@ class StaticPagesController < ApplicationController
   end
 
   def error_404
-    render status: 404, text: "Site not found.<br><a href='/'>Go home</a>"
+    render status: 404, inline: "Site not found.<br><a href='/'>Go home</a>"
   end
 
   def install_instructions

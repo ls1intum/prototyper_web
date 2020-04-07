@@ -1,4 +1,4 @@
-class Feedback < ActiveRecord::Base
+class Feedback < ApplicationRecord
   belongs_to :release
   belongs_to :user
 
