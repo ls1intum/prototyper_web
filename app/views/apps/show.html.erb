@@ -51,18 +51,18 @@
         <% end %>
       </div>
       <div class="col-xs-4 col-md-4">
-        <%= link_to app_releases_new_from_build_path(@app) do %>
+        <%= link_to app_releases_new_prototype_path(@app) do %>
           <button type="button" class="btn btn-default btn-block">
             <i class="fa fa-plus"></i>
-            Create release from build file
+            Create release from Marvel mockup
           </button>
         <% end %>
       </div>
       <div class="col-xs-4 col-md-4">
-        <%= link_to new_app_container_path(@app) do %>
+        <%= link_to app_releases_new_from_build_path(@app) do %>
           <button type="button" class="btn btn-default btn-block">
             <i class="fa fa-plus"></i>
-            Download container for Prototyper Framework
+            Create release from build file
           </button>
         <% end %>
       </div>
