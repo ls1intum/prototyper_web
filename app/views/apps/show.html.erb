@@ -42,7 +42,15 @@
 <div class="tab-content" id="content-nav">
   <div id="releases" class="tab-pane fade in active">
     <div id="new_release" class="row">
-      <div class="col-xs-4 col-md-6">
+      <div class="col-xs-4 col-md-4">
+        <%= link_to app_releases_new_beta_path(@app) do %>
+          <button type="button" class="btn btn-default btn-block">
+            <i class="fa fa-plus"></i>
+            Create release from bamboo build
+          </button>
+        <% end %>
+      </div>
+      <div class="col-xs-4 col-md-4">
         <%= link_to app_releases_new_from_build_path(@app) do %>
           <button type="button" class="btn btn-default btn-block">
             <i class="fa fa-plus"></i>
@@ -50,7 +58,7 @@
           </button>
         <% end %>
       </div>
-      <div class="col-xs-4 col-md-6">
+      <div class="col-xs-4 col-md-4">
         <%= link_to new_app_container_path(@app) do %>
           <button type="button" class="btn btn-default btn-block">
             <i class="fa fa-plus"></i>
