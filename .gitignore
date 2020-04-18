@@ -83,3 +83,6 @@ private_key_local.pem
 .generators
 .idea/
 .rakeTasks
+
+# Ignore dynamic data
+**/release_*
