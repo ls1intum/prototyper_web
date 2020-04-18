@@ -77,3 +77,9 @@ yarn-debug.log*
 # Ignore private keys
 private_key.pem
 private_key_local.pem
+
+
+# Ignore RubyMine
+.generators
+.idea/
+.rakeTasks
