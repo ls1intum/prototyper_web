@@ -65,5 +65,7 @@ __Upload public key to bamboo__
   - __Execute as__: None
   - __Allow user impersonation through 2-Legged OAuth__: false
 
-## 4. Run 'docker-compose up -d' and your server is running on port 80
-## 5. [Optional] Setup reverse proxy to handle ssl outside of the prototyper container 
+## 4. Start the container with docker-compose
+Run 'docker-compose up -d' and your server is running on port 80
+## 5. [Optional] Setup Reverse Proxy
+Reverse proxy can be set up to handle ssl outside of the prototyper container 
