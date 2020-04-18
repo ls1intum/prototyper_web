@@ -1,0 +1,4 @@
+# Ignore dirs that are mapped via volumes 
+public
+private
+temp
