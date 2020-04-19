@@ -3,7 +3,7 @@ class App < ApplicationRecord
   has_many :groups, dependent: :destroy
   has_many :releases, dependent: :destroy
   has_many :containers, dependent: :destroy
-  has_and_belongs_to_many :admins, :class_name=>"User", :join_table => :Apps_Users
+  has_and_belongs_to_many :admins, :class_name=>"User", :join_table => :apps_users
 
   VALID_BUNDLE_ID_REGEX = /\A\w+(?:\.\w+)+\z/i
 

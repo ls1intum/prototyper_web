@@ -7,7 +7,7 @@ class User < ApplicationRecord
   has_many :groups, through: :group_users
   has_many :feedbacks, dependent: :destroy
   has_many :downloads, dependent: :destroy
-  has_and_belongs_to_many :administratable_apps, :class_name=>"App", :join_table => :Apps_Users
+  has_and_belongs_to_many :administratable_apps, :class_name=>"App", :join_table => :apps_users
 
   before_save   :downcase_email
   before_create :create_activation_digest
