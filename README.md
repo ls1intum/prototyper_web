@@ -22,7 +22,7 @@ application up and running using the docker image.
 ## 2. Rename template files
  - Rename `./template.env` to `./.env` and change the values accordingly
    - Make sure to to set the `JIRA_AUTH_TOKEN` variable to `base64encode(<Jira-application-link-username>:<jira-application-link-password>)` in single quotes (`'`). Example: `JIRA_AUTH_TOKEN='XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX='` 
- - [Optional for develpment] Update values for test and development in config/secrets.yml
+ - [Optional for develpment] Update values for test and development in `config/secrets.yml`
 ## 3. Configure omniauth
 __Create keypair and public key files__
 ```bash
