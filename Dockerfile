@@ -25,6 +25,6 @@ ENV RAILS_ENV production
 
 RUN apt-get update && \
     apt-get upgrade -y && \
-    apt-get install -y imagemagick libmagickcore-dev libmagickwand-dev tzdata && \
+    apt-get install -y imagemagick libmagickcore-dev libmagickwand-dev tzdata wget && \
     bundle install --deployment --without development test && \
     apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
